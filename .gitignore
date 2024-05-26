@@ -1,5 +1,6 @@
 # ignores all .DS_store files
 *.DS_Store
+.env
 
 # does not ignore the README.md file
 !README.md
