@@ -1,0 +1,5 @@
+# ignores all .DS_store files
+*.DS_Store
+
+# does not ignore the README.md file
+!README.md
