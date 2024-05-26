@@ -8,8 +8,6 @@ services:
     env_file: .env
     ports:
       - "8138:8138"
-    volumes:  
-      - ./reports:/src/products/reports
-      - ./tests:/src/products/tests 
+
   
   
