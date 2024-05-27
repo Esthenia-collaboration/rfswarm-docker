@@ -1,0 +1,13 @@
+---
+name: Check Docker Can Compose
+
+on: push
+
+jobs:
+  Check_Compose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check that the image builds
+        run: docker build . --file Dockerfile
