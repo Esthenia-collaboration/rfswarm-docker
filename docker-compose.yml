@@ -5,7 +5,6 @@ services:
       dockerfile: distribution/base/Dockerfile
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
-    env_file: .env
     ports:
       - "8138:8138"
 
