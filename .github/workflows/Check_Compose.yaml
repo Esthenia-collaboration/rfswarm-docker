@@ -9,5 +9,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Check that the image builds
+      - name: Check that the image builds and runs
         run: docker compose up -d
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+      - name: Shut docker down
+        run: docker compose down
