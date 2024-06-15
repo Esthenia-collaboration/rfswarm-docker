@@ -5,14 +5,14 @@ jobs:
     name: Push rfswarm docker base image to gitlab registry
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
-          registry: rfswarm-gcr.io
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the rfswarm docker base image
         run: |
-              docker build . --tag rfswarm-gcr.io/rfswarm/rfswarm-base-image-gcr:latest
-              docker push rfswarm-gcr.io/rfswarm/rfswarm-base-image-gcr:latest
+              docker build . --tag ghcr.io/rfswarm/rfswarm-base-image-gcr:latest
+              docker push ghcr.io/rfswarm/rfswarm-base-image-gcr:latest
