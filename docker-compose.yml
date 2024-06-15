@@ -3,6 +3,7 @@ services:
     build:
       context: agent
       dockerfile: distribution/base/Dockerfile
+    image: rfswarm-base-image  
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
     ports:
