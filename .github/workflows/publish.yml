@@ -15,4 +15,4 @@ jobs:
       - name: Build the rfswarm docker base image
         run: docker compose -f docker-compose.yml build 
       - name: Push image on github registry       
-        run:  docker push ghcr.io/rfswarm-base-image:latest
+        run:  docker compose -f docker-compose.yml push
