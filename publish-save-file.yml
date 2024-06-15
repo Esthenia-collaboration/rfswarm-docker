@@ -12,7 +12,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build the rfswarm docker base image
-        run: docker compose -f docker-compose.yml build 
-      - name: Push image on github registry       
-        run:  docker compose -f docker-compose.yml push ghcr.io/Esthenia-collaboration/rfswarm-base-image:latest
+        - name: Build the rfswarm docker base image
+          run: docker compose -f docker-compose.yml build 
+        - name: Push image on github registry       
+          run:  docker compose -f docker-compose.yml push
