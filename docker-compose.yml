@@ -3,7 +3,7 @@ services:
     build:
       context: agent
       dockerfile: distribution/base/Dockerfile
-    image: ghcr.io/esthenia-collaboration/rfswarm-base-image:latest  
+    image: ghcr.io/esthenia-collaboration/rfswarm-agent-base-image:latest  
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
     ports:
