@@ -5,4 +5,6 @@ RUN   pip install rfswarm-agent
 RUN   pip install robotframework-requests 
 RUN   pip install robotframework-datadriver
 # Run the agent
-ENTRYPOINT ["rfswarm-agent", "-m", "http://manager:8138", "-g", "2"]
+ENTRYPOINT ["rfswarm-agent"]
+# Set the default arguments
+CMD ["-m", "http://manager:8138", "-g", "2"]
