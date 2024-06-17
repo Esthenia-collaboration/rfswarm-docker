@@ -1,12 +1,13 @@
 services:
   rfswarm_agent:
     build:
-      context: agent
-      dockerfile: distribution/base/Dockerfile
+      context: .
+      dockerfile: agent/distribution/rfswarm-base-image/Dockerfile
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
     ports:
       - "8138:8138"
-
-  
-  
+    volumes:
+      - type: bind
+        source: agent/distribution/rfswarm-base-image/entrypoint.sh
+        target: /opt/bin/entrypoint.sh
