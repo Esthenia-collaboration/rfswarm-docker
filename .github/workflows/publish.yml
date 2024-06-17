@@ -4,6 +4,9 @@ jobs:
   push_to_github_registry:
     name: Push rfswarm docker base image to gitlab registry
     runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE_NAME: ghcr.io/esthenia-collaboration/rfswarm-agent-base-image
+      DOCKER_IMAGE_TAG: latest
     permissions:
       contents: read
       packages: write
@@ -16,6 +19,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the rfswarm docker base image
-        run: docker compose -f docker-compose.yml build 
+        run: docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG -f agent/rfswarm-base-image/Dockerfile .
       - name: Push image on github registry       
-        run:  docker push ghcr.io/esthenia-collaboration/rfswarm-agent-base-image:latest
+        run: docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
