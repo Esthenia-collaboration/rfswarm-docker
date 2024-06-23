@@ -4,12 +4,12 @@ jobs:
   push_to_dockerhub_registry:
     name: Push rfswarm-agent docker base image to dockerhub registry
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE_NAME: esthenia-collaboration/rfswarm-agent-base-image
-      DOCKER_IMAGE_TAG: latest
     permissions:
       contents: read
       packages: write
+    env:
+      DOCKER_IMAGE_NAME: estheniacollaboration/rfswarm-agent-base-image
+      DOCKER_IMAGE_TAG: latest
     steps:
       - uses: actions/checkout@v4
       - name: Login to DockerHub Container Registry with secret variables
