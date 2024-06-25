@@ -1,13 +1,7 @@
 services:
   rfswarm_agent:
-    build:
-      context: .
-      dockerfile: agent/rfswarm-base-image/Dockerfile
+    image: ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
     ports:
       - "8138:8138"
-    volumes:
-      - type: bind
-        source: agent/rfswarm-base-image/entrypoint.sh
-        target: /opt/bin/entrypoint.sh
