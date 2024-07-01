@@ -1,6 +1,6 @@
 services:
   rfswarm_agent:
-    image: ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
+    image: estheniacollaboration/rfswarm-agent-base-image:latest
     hostname: rfswarm_agent    
     container_name: rfswarm_agent
     ports:
