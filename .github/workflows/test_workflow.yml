@@ -14,6 +14,6 @@ jobs:
       - name: Show variables
         run: |
           ORIGINAL_PATH="${{ github.event_path }}"
-          NEW_PATH="${{ github.event_path | regex_replace('/', '-') }}"
+          NEW_PATH="${ github.event_path////- }"
           echo "Original path: ${ORIGINAL_PATH}"
           echo "New path: ${NEW_PATH}"
