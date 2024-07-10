@@ -78,7 +78,7 @@ jobs:
         shell: bash
       - name: Shut docker container stop
         run: docker stop rfswarm-container-for-check
-  push_to_dockerhub_registry:
+  push_to_github_registry:
     name: Push rfswarm ${{ matrix.image }} image to registry
     needs:
       - get_changed
@@ -92,7 +92,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
-      - name: Login to DockerHub Container Registry with secret variables
+      - name: Login to GitHub Container Registry with secret variables
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -100,5 +100,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the rfswarm agent docker base image
         run: docker build -t "$DOCKER_IMAGE_PREFIX"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):$DOCKER_IMAGE_TAG -f ${{ matrix.image }}/Dockerfile .
-      - name: Push image on dockerhub registry
+      - name: Push image on github registry
         run: docker push "$DOCKER_IMAGE_PREFIX"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):$DOCKER_IMAGE_TAG
