@@ -79,7 +79,7 @@ jobs:
       - name: Shut docker container stop
         run: docker stop rfswarm-container-for-check
   push_to_dockerhub_registry:
-    name: Push rfswarm-agent docker base image to dockerhub registry
+    name: Push rfswarm ${{ matrix.image }} image to registry
     needs:
       - get_changed
       - check_docker_build
