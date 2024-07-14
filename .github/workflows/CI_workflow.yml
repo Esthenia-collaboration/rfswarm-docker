@@ -3,7 +3,7 @@ on:
   push:
 
 env:
-  DOCKER_IMAGE_NAME: estheniacollaboration/rfswarm-agent-base-image
+  DOCKER_IMAGE_NAME: estheniacollaboration/agents/rfswarm-agent-base-image
   DOCKER_IMAGE_TAG: latest
 
 jobs:
