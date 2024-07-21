@@ -17,6 +17,7 @@ on:
         required: true
 
 jobs:
+  # https://stackoverflow.com/questions/76661371/github-actions-build-docker-image-when-there-are-changes-in-folder
   get_changed:
     runs-on: ubuntu-latest
     permissions:
