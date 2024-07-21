@@ -4,13 +4,10 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'agent/base/**'
-      - 'agent/with-ssh/**'
 
 jobs:
   check_build_push:
-    if: github.GITHUB_REF_TYPE == 'tag'
+    if: github.ref_type == 'tag'
     uses: ./.github/workflows/check_build_push_template.yml
     with:
       REGISTRY_URL: docker.io
