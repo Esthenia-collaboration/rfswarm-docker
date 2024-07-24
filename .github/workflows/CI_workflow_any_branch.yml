@@ -1,0 +1,20 @@
+name: Standard any branch CI workflow
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths:
+      - 'agent/base/**'
+      - 'agent/with-ssh/**'
+
+jobs:
+  check_build_push:
+    uses: ./.github/workflows/check_build_push_template.yml
+    with:
+      REGISTRY_URL: ghcr.io
+      DOCKER_IMAGE_PREFIX: /esthenia-collaboration/rfswarm-
+      DOCKER_IMAGE_TAG: ${{ github.ref_name }}
+    secrets:
+      REGISTRY_USERNAME: ${{ github.actor }}
+      REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}

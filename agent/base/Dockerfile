@@ -5,7 +5,7 @@ RUN   pip install rfswarm-agent
 RUN   pip install robotframework-requests 
 RUN   pip install robotframework-datadriver
 
-COPY  agent/rfswarm-base-image/entrypoint.sh /opt/bin/entrypoint.sh
+COPY  agent/base/entrypoint.sh /opt/bin/entrypoint.sh
 RUN   chmod +x /opt/bin/entrypoint.sh
 
 # Run the agent
