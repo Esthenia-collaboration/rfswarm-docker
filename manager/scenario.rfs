@@ -1,0 +1,13 @@
+[Scenario]
+uploadmode = err
+scriptcount = 1
+graphlist =
+
+[1]
+robots = 4
+delay = 0
+rampup = 30
+run = 120
+test = Send a message on kafka topic
+script = .\rfswarm.robot
+
