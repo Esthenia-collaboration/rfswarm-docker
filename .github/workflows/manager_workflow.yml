@@ -1,0 +1,39 @@
+name: Run manager on runner
+on:
+  push:
+
+jobs:
+  run_rfswarm_manager:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        # This is the version of the action for setting up Python, not the Python version.
+        uses: actions/setup-python@v5
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.11'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+      - name: Install rfswarm manager dependencies
+        run: pip install rfswarm-manager
+      - name: Run rfswarm manager
+        run: |
+          export DISPLAY=:0
+          rm -rf /tmp/.X0-lock
+          Xvfb :0 -screen 0 640x480x8 -nolisten tcp &
+          rfswarm &
+        # Get built image
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check that the image builds
+        run: docker build -t rfswarm-base-image-for-check -f agent/base/Dockerfile .
+      - name: Check that the built image runs
+        run: docker run -d --rm --name rfswarm-base-container-for-check rfswarm-base-image-for-check
+      - name: Sleep for 3 min
+        run: sleep 3m
+        shell: bash
+      - name: Shut docker container stop
+        run: docker stop rfswarm-container-for-check
+
