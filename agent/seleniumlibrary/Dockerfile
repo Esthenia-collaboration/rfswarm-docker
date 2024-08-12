@@ -16,6 +16,7 @@ RUN   apt-get install -y libcurl4 libxss1 libappindicator1 gdebi gnupg2
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       gdebi --n google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb
+# We will use this versionning below to display google chrome version in the package information      
 RUN   google-chrome --version           
 
 # Run the agent
