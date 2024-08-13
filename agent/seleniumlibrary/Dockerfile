@@ -9,9 +9,9 @@ RUN   pip install robotframework-seleniumlibrary
 RUN   apt-get update -qq && apt-get install sudo apt-utils python3-pip -y python-dev-is-python3 python3-tk  \
       python3-pil python3-pil.imagetk tk-dev gcc xvfb x11-xserver-utils  x11-apps
 #  Install browser's dependencies 
-RUN   apt-get -y update && apt-get install -y bc curl make libaio1 wget unzip bash build-essential postgresql-server-dev-all
-#  Install google Chrome as browser The last chrome's stable version will be installed.
-#  No need to install chromedriver while using SeleniumLibrary version 6.4.0 and further
+RUN   apt-get -y update && apt-get install -y bc curl libaio1 wget unzip bash build-essential postgresql-server-dev-all
+#  Install google Chrome as browser. The last chrome's stable version will be installed.
+#  No need to install chromedriver while using SeleniumLibrary version 6.4.0 and further. The driver is already included in Selenium Library classes
 RUN   apt-get install -y libcurl4 libxss1 libappindicator1 gdebi gnupg2
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       gdebi --n google-chrome-stable_current_amd64.deb && \
