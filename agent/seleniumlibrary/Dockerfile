@@ -1,4 +1,4 @@
-FROM  estheniacollaboration/rfswarm-agent-base-image
+FROM  estheniacollaboration/rfswarm-agent-base:rf-v1.0.1
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="${PYTHONPATH}:/src/"
