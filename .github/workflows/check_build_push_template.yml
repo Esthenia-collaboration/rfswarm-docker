@@ -39,7 +39,7 @@ jobs:
       - name: Get docker image names
         shell: python
         env:
-          PROJECT_IMAGES: agent/base agent/seleniumlibrary agent/sshlibrary
+          PROJECT_IMAGES: agent/base agent/seleniumlibrary-chrome agent/sshlibrary
         run: |
           from os import environ
           import json

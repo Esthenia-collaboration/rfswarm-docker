@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'agent/base/**'
-      - 'agent/seleniumlibrary/**'
+      - 'agent/seleniumlibrary-chrome/**'
       - 'agent/sshlibrary/**'
 
 jobs:
