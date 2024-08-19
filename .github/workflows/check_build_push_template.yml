@@ -105,6 +105,9 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_PASSWORD }}
       - name: Build the rfswarm agent docker base image
-        run: docker build -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }} -f ${{ matrix.image }}/Dockerfile .
+        run: |
+          docker build -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }} \
+          -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):latest \
+          -f ${{ matrix.image }}/Dockerfile .
       - name: Push image on registry
-        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ matrix.image }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }}
+        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ matrix.image }} |  sed "s/\//-/g") --all-tags
