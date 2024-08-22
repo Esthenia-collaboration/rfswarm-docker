@@ -1,7 +1,9 @@
 services:
-  rfswarm_agent:
-    image: estheniacollaboration/rfswarm-agent-base-image:latest
-    hostname: rfswarm_agent    
-    container_name: rfswarm_agent
-    ports:
-      - "8138:8138"
+  rfswarm_agent_selenium:
+    build:
+      context: agent
+      dockerfile: seleniumlibrary-chrome/Dockerfile
+    hostname: agent_selenium-chrome    
+    container_name: agent_selenium-chrome
+    volumes:
+      - ./tests:/src/product/tests

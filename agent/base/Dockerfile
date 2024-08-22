@@ -1,6 +1,6 @@
 FROM python:slim-bookworm
 #  Install all the requirements using pip
-RUN   pip install --upgrade pip 
+#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 RUN   pip install rfswarm-agent 
 RUN   pip install robotframework-requests 
 RUN   pip install robotframework-datadriver
