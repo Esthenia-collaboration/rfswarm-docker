@@ -1,4 +1,4 @@
-FROM  estheniacollaboration/rfswarm-agent-base:rf-v1.0.1
+FROM  estheniacollaboration/rfswarm-agent-base:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="${PYTHONPATH}:/src/"
@@ -18,5 +18,3 @@ RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chro
       rm google-chrome-stable_current_amd64.deb   
 # We will use this versionning below to display google chrome version in the package information      
 RUN   google-chrome --version           
-# Run the agent
-ENTRYPOINT ["/opt/bin/entrypoint.sh"]
