@@ -2,6 +2,7 @@ FROM  estheniacollaboration/rfswarm-agent-base:rf-v1.0.1
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="${PYTHONPATH}:/src/"
+#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \

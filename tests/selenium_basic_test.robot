@@ -8,15 +8,12 @@ Resource          keywords.robot
 
 
 *** Variables ***
-${URL}        http://www.google.com
-${BROWSER}    /usr/bin/chromedriver
-${research bar}    //*[@id="APjFqb"]
-${search term}     docker
+${URL}        https://github.com/
 
 
 *** Test Cases ***
 User launch a website
-    [Documentation]    This test is used to open a google  website
-    the wesite application is correctly launched
+    [Documentation]    This test is used to open github  website
+    the website application is correctly launched
 
 

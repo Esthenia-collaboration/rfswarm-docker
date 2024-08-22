@@ -1,21 +1,17 @@
 *** Settings ***
-Documentation    This file is e ressource file where keywords are
+Documentation    This file is a ressource file where keywords are
 ...              gathering.   
 
 Library    SeleniumLibrary
 
 
 *** Variables ***
-${DOWNLOADDIRECTORY}    /scr/
-${BROWSER}              /usr/bin/chromedriver
-${SEARCH FORM}         .//form
-${RESEARCH_BAR}        //*[@id="APjFqb"]  
-${INPUT_TEXTE}         healthy 
+${GITHUB_TITLE}    .//button/span[contains(text(),'Search')] 
 
 
 *** Keywords ***
 Open a Web site
-    [Documentation]    This keyword is used to open a website with Selenium browser
+    [Documentation]    This keyword is used to open a website with Chrome browser
     [Arguments]   ${URL}
     ${options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys
     Call Method  ${options}  add_argument  --disable-notifications
@@ -29,17 +25,9 @@ Open a Web site
     #Maximize Browser Window
     Set Window Size    1920    1080
 
-the wesite application is correctly launched
+the website application is correctly launched
     [Documentation]    This keyword is used to check if the website is
     ...                succefuly launched
-    Log To Console      Launch google  wesite
-    Click Button    xpath://*[@id="L2AGLb"]
-    Sleep    3
-    Wait Until Element Is Visible    xpath:${SEARCH FORM}     5    
-    Wait Until Element Is Visible    xpath:${RESEARCH_BAR}    5     
+    Log To Console      Launch github  wesite
+    Wait Until Element Is Visible    xpath:${GITHUB_TITLE}     5      
     capture page screenshot
-
-a user makes a query in the google search bar
-
-
-the search term is succefuly found in the current page
