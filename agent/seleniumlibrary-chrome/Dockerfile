@@ -1,4 +1,4 @@
-FROM  estheniacollaboration/rfswarm-agent-base:rf-v1.0.1
+FROM  estheniacollaboration/rfswarm-agent-base:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="${PYTHONPATH}:/src/"
@@ -17,5 +17,5 @@ RUN   apt-get install -y libxss1 libappindicator1
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb   
-# We will use this versionning below to display google chrome version in the package information      
+# We will use this versionning below to display google chrome version in the package informations      
 RUN   google-chrome --version           
