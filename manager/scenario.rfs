@@ -4,10 +4,10 @@ scriptcount = 1
 graphlist =
 
 [1]
-robots = 4
+robots = 1
 delay = 0
-rampup = 30
-run = 120
-test = Send a message on kafka topic
+rampup = 10
+run = 30
+test = RFSwarm Demo Test
 script = .\rfswarm.robot
 
