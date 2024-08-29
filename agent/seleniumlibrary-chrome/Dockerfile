@@ -17,5 +17,5 @@ RUN   apt-get install -y libxss1 libappindicator1
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb   
-# We will use this versionning below to display google chrome version in the package informations      
+# We will use this versionning below to display google chrome version in the package information      
 RUN   google-chrome --version           
