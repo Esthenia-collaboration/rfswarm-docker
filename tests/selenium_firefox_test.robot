@@ -20,5 +20,6 @@ User launch a website
     [Documentation]    This test is used to open github website with a chosen browser
     sleep    40
     the website application is correctly launched
+    Log To Console    Firefox launch sucess
 
 
