@@ -39,7 +39,7 @@ jobs:
       - name: Get docker image names
         shell: python
         env:
-          PROJECT_IMAGES: agent/base agent/seleniumlibrary-chrome agent/sshlibrary
+          PROJECT_IMAGES: agent/base agent/seleniumlibrary-chrome agent/sshlibrary agent/seleniumlibrary-firefox
         run: |
           from os import environ
           import json
@@ -78,7 +78,7 @@ jobs:
       - name: Check that the image builds
         run: docker build -t rfswarm-image-for-check -f ${{ matrix.image }}/Dockerfile .
       - name: Check that the built image runs
-        run: docker run -d --rm --name rfswarm-container-for-check rfswarm-image-for-check
+        run: docker run --rm --name rfswarm-container-for-check rfswarm-image-for-check
       - name: Sleep for 30 seconds
         run: sleep 30s
         shell: bash
