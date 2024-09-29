@@ -64,6 +64,7 @@ RUN firefox --version
 #==============================================================
 COPY  agent/seleniumlibrary-firefox/entrypoint.sh /opt/bin/entrypoint.sh
 COPY  tests/selenium_firefox_test.robot /tmp/selenium_firefox_test.robot
+COPY  tests/keywords.robot /tmp/keywords.robot
 RUN   chmod +x /opt/bin/entrypoint.sh
 ENTRYPOINT [ "/opt/bin/entrypoint.sh" ]
 
