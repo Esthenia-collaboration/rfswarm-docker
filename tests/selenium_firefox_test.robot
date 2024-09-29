@@ -21,5 +21,6 @@ User launch a website
     sleep    40
     the website application is correctly launched
     Log To Console    Firefox launch sucess
+    sleep    40
 
 
