@@ -63,6 +63,7 @@ RUN firefox --version
 # Run entrypoint.sh to set virtual display for headless test 
 #==============================================================
 COPY  seleniumlibrary-firefox/entrypoint.sh /opt/bin/entrypoint.sh
+COPY  test/selenium_firefox_test.robot /tmp/selenium_firefox_test.robot
 RUN   chmod +x /opt/bin/entrypoint.sh
 ENTRYPOINT [ "/opt/bin/entrypoint.sh" ]
 
