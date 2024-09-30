@@ -5,4 +5,3 @@ GEOMETRY="${SCREEN_WIDTH}x${SCREEN_HEIGHT}x${SCREEN_DEPTH}"
 Xvfb :0 -screen 0 $GEOMETRY -nolisten tcp &
 echo "Test is launched"
 robot -d /tmp/reports/ /tmp/selenium_firefox_test.robot || exit 1
-echo "Test completed"
