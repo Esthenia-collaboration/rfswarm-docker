@@ -1,9 +1,11 @@
 services:
-  rfswarm_agent_selenium:
+  rfswarm_agent_selenium-ff:
     build:
       context: agent
-      dockerfile: seleniumlibrary-chrome/Dockerfile
-    hostname: agent_selenium-chrome    
-    container_name: agent_selenium-chrome
+      dockerfile: seleniumlibrary-firefox/Dockerfile
+    hostname: agent_selenium-firefox    
+    container_name: agent_selenium-firefox
     volumes:
       - ./tests:/src/product/tests
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    entrypoint: tail -f /dev/null  

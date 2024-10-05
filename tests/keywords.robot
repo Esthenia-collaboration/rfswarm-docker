@@ -22,9 +22,17 @@ Open a Web site
     Call Method  ${options}  add_argument  --disable-gpu
     Call Method  ${options}  add_argument  --disable-dev-shm-usage
     Open Browser  ${URL}  Chrome  options=${options}
-    #Maximize Browser Window
+   # Create Webdriver    Chrome    chrome_options=${options} 
+   # Go To           ${URL}
+   # Set Window Size    1920    1080
     Set Window Size    1920    1080
 
+Open website 
+    [Documentation]    This keyword is used to lauchn a browser
+    [Arguments]   ${url}    ${browser name}
+    Open Browser  ${url}    browser=${browser name}
+    Maximize Browser Window 
+    
 the website application is correctly launched
     [Documentation]    This keyword is used to check if the website is
     ...                succefuly launched
