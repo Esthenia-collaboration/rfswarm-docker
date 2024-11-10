@@ -18,4 +18,4 @@ RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chro
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb   
 # We will use this versionning below to display google chrome version in the package information      
-RUN   google-chrome --version           
+RUN   google-chrome --version

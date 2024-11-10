@@ -1,6 +1,6 @@
 name: Run manager on runner
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   run_rfswarm_manager:
