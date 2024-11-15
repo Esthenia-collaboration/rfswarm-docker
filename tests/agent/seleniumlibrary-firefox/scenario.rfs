@@ -1,0 +1,20 @@
+[Scenario]
+uploadmode = err
+scriptcount = 2
+graphlist =
+
+[1]
+robots = 1
+delay = 0
+rampup = 10
+run = 30
+test = User launch a website
+script = /src/tests/selenium_basic_test.robot
+
+[2]
+robots = 1
+delay = 0
+rampup = 10
+run = 30
+test = User launch a website
+script = /src/tests/selenium_firefox_test.robot
