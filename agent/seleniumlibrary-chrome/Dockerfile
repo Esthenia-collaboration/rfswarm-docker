@@ -4,6 +4,7 @@ ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
+# Switch user root
 USER root
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa -y vim \
@@ -19,7 +20,7 @@ RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chro
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb
 
-#RUN  sudo mount -o rw,relatime,size=2G /dev/shm 
+# RUN  sudo mount -o rw,relatime,size=2G /dev/shm 
 
 USER rfagent       
 # We will use this versionning below to display google chrome version in the package information      

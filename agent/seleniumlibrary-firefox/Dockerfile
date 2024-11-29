@@ -7,6 +7,7 @@ ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent"
 
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
+# Switch user root
 USER root
 RUN apt-get update -y \ 
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \
