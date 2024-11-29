@@ -1,12 +1,13 @@
-FROM  estheniacollaboration/rfswarm-agent-base:latest
+FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH 1280
 ENV   SCREEN_HEIGHT 720
 ENV   SCREEN_DEPTH 16
-ENV   PYTHONPATH="${PYTHONPATH}:/src/"
+ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent"
 
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
+USER root
 RUN apt-get update -y \ 
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \
   && rm -rf /var/lib/apt/lists/*
@@ -52,6 +53,9 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
   && chmod 755 /opt/geckodriver-$GK_VERSION \
   && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
+# Switch to 'rfagent user'
+USER rfagent
+
 # We will use this versionning below to display firefox version in the package information  
 #============================================
 # Dumping Browser information 
@@ -60,10 +64,12 @@ RUN echo "firefox"
 RUN firefox --version
 
 #==============================================================
-# Run entrypoint.sh to set virtual display
+# Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY  agent/seleniumlibrary-firefox/entrypoint.sh /opt/bin/entrypoint.sh
-RUN   chmod +x /opt/bin/entrypoint.sh
-ENTRYPOINT [ "/opt/bin/entrypoint.sh" ]
+COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
+COPY --chown=rfagent  tests/*  /usr/rfagent/scripts/
+COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
+WORKDIR  /usr/rfagent
+ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]
 
    

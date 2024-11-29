@@ -5,8 +5,17 @@ RUN   pip install rfswarm-agent
 RUN   pip install robotframework-requests 
 RUN   pip install robotframework-datadriver
 
-COPY  agent/base/entrypoint.sh /opt/bin/entrypoint.sh
-RUN   chmod +x /opt/bin/entrypoint.sh
+# Create a user 'rfagent'
+RUN useradd -m rfagent
+
+# Switch to 'rfagent user'
+USER rfagent
+
+COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
+COPY --chown=rfagent  agent/tests/*  /usr/rfagent/scripts/
+COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
+WORKDIR  /usr/rfagent
 
 # Run the agent
-ENTRYPOINT ["/opt/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/rfagent/scripts/entrypoint.sh"]
+       
