@@ -6,36 +6,36 @@ Library    SeleniumLibrary
 
 
 *** Variables ***
-${GITHUB_TITLE}    .//button/span[contains(text(),'Search')] 
+${DOCKERHUB_SITE}     .//*/a[contains(text(),'estheniacollaboration')] 
 
 
 *** Keywords ***
-Open a Web site
-    [Documentation]    This keyword is used to open a website with Chrome browser
-    [Arguments]   ${URL}
-    ${options}=  Evaluate  sys.modules['selenium.webdriver'].ChromeOptions()  sys
-    Call Method  ${options}  add_argument  --disable-notifications
-    Call Method  ${options}  add_argument  --disable-infobars
-    Call Method  ${options}  add_argument  --disable-extensions
-    Call Method  ${options}  add_argument  --no-sandbox
-    Call Method  ${options}  add_argument  --headless
-    Call Method  ${options}  add_argument  --disable-gpu
-    Call Method  ${options}  add_argument  --disable-dev-shm-usage
-    Open Browser  ${URL}  Chrome  options=${options}
-   # Create Webdriver    Chrome    chrome_options=${options} 
-   # Go To           ${URL}
-   # Set Window Size    1920    1080
-    Set Window Size    1920    1080
-
-Open website 
-    [Documentation]    This keyword is used to lauchn a browser
-    [Arguments]   ${url}    ${browser name}
-    Open Browser  ${url}    browser=${browser name}
-    Maximize Browser Window 
-    
-the website application is correctly launched
+Open Website
+    [Documentation]   This keyword is used to launch Chrome or firefox browser
+    [Arguments]    ${url}    ${browser_name}
+    IF   $browser_name == 'Chrome'
+        ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys
+        Call Method    ${chrome_options}   add_argument    --headless
+        Call Method    ${chrome_options}   add_argument    --disable-gpu
+        Open Browser    ${url}   browser=${browser_name} 	options=${chrome_options}
+    ELSE IF    $browser_name == 'headlessfirefox'
+        Open Browser  ${url}    browser=${browser_name} 
+    ELSE
+        Log  The browser ${browser_name} is not Chrome neither headlessfirefox
+    END   
+    Maximize Browser Window
+    sleep 	10
+    Go To 	https://github.com/Esthenia-collaboration/rfswarm-docker/
+    sleep 	10
+    Capture Page Screenshot 
+    Go To 	https://github.com/damies13/rfswarm
+    Capture Page Screenshot
+        
+Website application has been correctly launched
     [Documentation]    This keyword is used to check if the website is
     ...                succefuly launched
-    Log To Console      Launch github  wesite
-    Wait Until Element Is Visible    xpath:${GITHUB_TITLE}     5      
-    capture page screenshot
+    [Arguments]        ${url}
+    Go To 	${url}
+    sleep   10
+    Wait Until Element Is Visible    xpath:${DOCKERHUB_SITE}     5      
+    Capture page screenshot
