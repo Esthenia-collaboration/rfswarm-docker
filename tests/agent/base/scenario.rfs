@@ -1,0 +1,12 @@
+[Scenario]
+uploadmode = err
+scriptcount = 1
+graphlist =
+
+[1]
+robots = 1
+delay = 0
+rampup = 10
+run = 30
+test = RFSwarm Demo Test
+script = /usr/rfagent/scripts/rfswarm.robot

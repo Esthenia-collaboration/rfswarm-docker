@@ -1,0 +1,36 @@
+name: Run manager on runner
+on:
+  workflow_dispatch:
+
+jobs:
+  run_rfswarm_manager:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        # This is the version of the action for setting up Python, not the Python version.
+        uses: actions/setup-python@v5
+        with:
+          # Semantic version range syntax or exact version of a Python version
+          python-version: '3.11'
+          # Optional - x64 or x86 architecture, defaults to x64
+          architecture: 'x64'
+      - name: Create network
+        run: docker network create docker_network
+      - name: Build manager image
+        run: |
+          docker build -t rfswarm-docker-manager -f manager/Dockerfile .
+      - name: Run rfswarm agent
+        run: |
+          docker run --rm -d --name agent --hostname agent --network docker_network \
+          estheniacollaboration/rfswarm-agent-base:latest
+      - name: Run rfswarm manager
+        run: |
+          docker run --rm --name manager --hostname manager --network docker_network \
+          -p 8138:8138 -v $(pwd)/manager/scenario:/src/manager/scenario \
+          rfswarm-docker-manager
+      - name: Clean docker space
+        run: |
+          docker stop agent;
+          docker network rm docker_network

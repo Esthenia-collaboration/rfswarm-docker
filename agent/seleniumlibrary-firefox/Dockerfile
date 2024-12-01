@@ -54,7 +54,7 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
   && chmod 755 /opt/geckodriver-$GK_VERSION \
   && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
-# Switch to 'rfagent user'
+# Switch to custom rfagent user previously created in rfswarm agent base image
 USER rfagent
 
 # We will use this versionning below to display firefox version in the package information  
@@ -68,7 +68,7 @@ RUN firefox --version
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
 COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
-COPY --chown=rfagent  tests/*  /usr/rfagent/scripts/
+COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
 COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
 WORKDIR  /usr/rfagent
 ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]

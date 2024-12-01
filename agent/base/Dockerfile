@@ -12,7 +12,7 @@ RUN useradd -m rfagent
 USER rfagent
 
 COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
-COPY --chown=rfagent  tests/*  /usr/rfagent/scripts/
+COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
 COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
 WORKDIR  /usr/rfagent
 

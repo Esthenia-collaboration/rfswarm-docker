@@ -77,13 +77,31 @@ jobs:
         uses: actions/checkout@v4
       - name: Check that the image builds
         run: docker build -t rfswarm-image-for-check -f ${{ matrix.image }}/Dockerfile .
-      - name: Check that the built image runs
-        run: docker run -d --rm --name rfswarm-container-for-check rfswarm-image-for-check
-      - name: Sleep for 30 seconds
-        run: sleep 30s
-        shell: bash
-      - name: Shut docker container stop
-        run: docker stop rfswarm-container-for-check
+      - name: Build manager image
+        run: |
+          docker build -t rfswarm-docker-manager -f manager/Dockerfile .
+      - name: Create network
+        run: docker network create docker_network
+      - name: Run rfswarm agent
+        run: |
+          docker run --rm --name agent --hostname agent --network docker_network \
+          rfswarm-image-for-check
+      - name: Run rfswarm manager or pass
+        run: |
+          if ! [ -f $(pwd)/tests/${{ matrix.image }}/scenario.rfs ]; then
+            echo "Scenario file does not exist, nothing to run."
+          else
+            docker run --rm --name manager --hostname manager --network docker_network \
+            -p 8138:8138 \
+            --mount type=bind,source=$(pwd)/tests/${{ matrix.image }}/scenario.rfs,target=/src/manager/scenario.rfs \
+            -v $(pwd)/tests/suites:/src/tests \
+            --mount type=bind,source=$(pwd)/manager/manager.ini,target=/src/manager/manager.ini \
+            rfswarm-docker-manager
+          fi
+      - name: Clean docker space
+        run: |
+          docker stop agent;
+          docker network rm docker_network
   push_to_registry:
     name: Push rfswarm ${{ matrix.image }} image to registry
     needs:
