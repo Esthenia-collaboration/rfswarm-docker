@@ -22,6 +22,7 @@ RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chro
 
 # RUN  sudo mount -o rw,relatime,size=2G /dev/shm 
 
+# Switch to custom rfagent user previously created in rfswarm agent base image
 USER rfagent       
 # We will use this versionning below to display google chrome version in the package information      
-RUN   google-chrome --version         
+RUN   google-chrome --version
