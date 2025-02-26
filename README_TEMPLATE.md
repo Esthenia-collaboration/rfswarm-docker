@@ -1,7 +1,7 @@
 # RFSWARM-DOCKER
 ## Why? [![why rfswarm](https://img.shields.io/badge/start%20with-why%3F-brightgreen.svg?style=flat)]
 
-> In quality assurance filed, it's appears like an evidence that performance tests are critical to increase confidance about software resilience, sclability or to identify likely bottleneck for instance.
+> In quality assurance field, it's appears like an evidence that performance tests are critical to increase confidance about software resilience, sclability or to identify likely bottleneck for instance.
 > Despite those evidence, performances tests are not systematically implemented in software developpement cycle, on the contrary most of the time they aren't even present in test heritage. Why that?
 > One of the reason might be that performance tests are a specific test type which require a specific vocabulary, kwoledge and environnement dependecy. In addition, most performance test softwares require time to get into, and to become confortable with the software
 > Finally ,performance testing requires graphical representation of the relevant metrics measured during testing, to facilitate result's interpretation. 
@@ -13,7 +13,7 @@ Which help to optimize test effort, minimize test heritage maintenance and impro
 
 ## rfswarm-docker then?
 rfswarm-docker have been created to make rfswarm performance test tool available in a containarize version.
-Making the tool available in a Docker container, facilitating the automation of performance tests by integrating them into a CI/CD chain.
+Making the tool available in a Docker container, facilitating the automation of performance tests by integrating them into a CI/CD environment.
 Applying performance test on Application under test (ATU) has never been easier.
 Just run manager agent image, your neeedd agent image which will run the nomber of user desired on your choosen server.
  
