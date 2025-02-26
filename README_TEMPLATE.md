@@ -8,7 +8,7 @@
 > To help democratize performance testing for a wide range of projcts in need, "rfswarm-docker" have been created.
 
 ## What is RFSWARM
-Rfswarm is a performance test tool creates by damies13 [rfswarm](https://github.com/damies13/rfswarm/tree/master/Doc) to make it easy the reuse of integration or functionas tests written with robot framework.
+Rfswarm is a performance test tool creates by damies13 [rfswarm](https://github.com/damies13/rfswarm/tree/master/Doc) to make it easy the reuse of integration or functionals tests written with robot framework.
 Which help to optimize test effort, minimize test heritage maintenance and improve quality assurance efficiency.
 
 ## rfswarm-docker then?
