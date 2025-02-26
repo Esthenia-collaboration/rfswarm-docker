@@ -3,9 +3,9 @@
 
 > In quality assurance field, it's appears like an evidence that performance tests are critical to increase confidance about software resilience, sclability or to identify likely bottleneck for instance.
 > Despite those evidence, performances tests are not systematically implemented in software developpement cycle, on the contrary most of the time they aren't even present in test heritage. Why that?
-> One of the reason might be that performance tests are a specific test type which require a specific vocabulary, kwoledge and environnement dependecy. In addition, most performance test softwares require time to get into, and to become confortable with the software
+> One of the reason might be that performance tests are a specific test type which require a specific vocabulary, kwoledge and environnement dependecy. In addition, most performance test softwares require time to get into, and to become confortable with the software.
 > Finally ,performance testing requires graphical representation of the relevant metrics measured during testing, to facilitate result's interpretation. 
-> To help democratize performance testing for a wide range of projets in need, "rfswarm-docker" have been created.
+> To help democratize performance testing for a wide range of projcts in need, "rfswarm-docker" have been created.
 
 ## What is RFSWARM
 Rfswarm is a performance test tool creates by damies13 [rfswarm](https://github.com/damies13/rfswarm/tree/master/Doc) to make it easy the reuse of integration or functionas tests written with robot framework.
