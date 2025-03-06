@@ -1,0 +1,78 @@
+name: build-push-and-test-template
+
+on:
+  workflow_call:
+    inputs:
+      IMAGE:
+        type: string
+        required: true
+      DOCKER_IMAGE_TAG:
+        type: string
+        default: ${{ github.ref_name }}
+      REGISTRY_URL:
+        type: string
+      DOCKER_IMAGE_PREFIX:
+        type: string
+    secrets:
+      REGISTRY_USERNAME:
+        required: true
+      REGISTRY_PASSWORD:
+        required: true
+
+jobs:
+  check_docker_build:
+    name: "Check image: ${{ inputs.IMAGE }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check that the image builds
+        run: docker build -t rfswarm-image-for-check -f ${{ inputs.IMAGE }}/Dockerfile .
+      - name: Build manager image
+        run: |
+          docker build -t rfswarm-docker-manager -f manager/Dockerfile .
+      - name: Create network
+        run: docker network create docker_network
+      - name: Run rfswarm agent
+        run: |
+          docker run --rm -d --name agent --hostname agent --network docker_network \
+          rfswarm-image-for-check
+      - name: Run rfswarm manager or pass
+        run: |
+          if ! [ -f $(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
+            echo "Scenario file does not exist, nothing to run."
+          else
+            docker run --rm --name manager --hostname manager --network docker_network \
+            -p 8138:8138 \
+            --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenario.rfs \
+            -v $(pwd)/tests/suites:/src/tests \
+            --mount type=bind,source=$(pwd)/manager/manager.ini,target=/src/manager/manager.ini \
+            rfswarm-docker-manager
+          fi
+      - name: Clean docker space
+        run: |
+          docker stop agent;
+          docker network rm docker_network
+  push_to_registry:
+    name: Push rfswarm ${{ inputs.IMAGE }} image to registry
+    needs:
+      - check_docker_build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Registry with secret variables
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build the rfswarm agent docker base image
+        run: |
+          docker build -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }} \
+          -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):latest \
+          -f ${{ inputs.IMAGE }}/Dockerfile .
+      - name: Push image on registry
+        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
