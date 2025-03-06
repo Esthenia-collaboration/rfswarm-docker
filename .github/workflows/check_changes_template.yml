@@ -1,0 +1,62 @@
+name: check-changes-template
+
+on:
+  workflow_call:
+    inputs:
+      PROJECT_IMAGES:
+        type: string
+        required: true
+    outputs:
+      IMAGES_TO_BUILD:
+        description: "Images to build"
+        value: ${{ jobs.get_changed.outputs.IMAGES_TO_BUILD }}
+jobs:
+  # https://stackoverflow.com/questions/76661371/github-actions-build-docker-image-when-there-are-changes-in-folder
+  get_changed:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: read
+    outputs:
+      IMAGES_TO_BUILD: ${{ steps.get_images_names.outputs.IMAGES_TO_BUILD }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Get changed files with predefined action
+        id: changed-files
+        uses: tj-actions/changed-files@v37
+      - name: Save changed files into variable
+        run: |
+          # save files into variable
+          printf 'CHANGED_FILES=%s\n' "${{ steps.changed-files.outputs.all_changed_files }}" >> "${GITHUB_ENV}"
+      - name: Set inputs as environment variables
+        run: |
+          echo "PROJECT_IMAGES=${{ inputs.PROJECT_IMAGES }}" >> ${GITHUB_ENV}
+      - name: Get docker image names
+        shell: python
+        id: get_images_names
+        run: |
+          from os import environ
+          import json
+
+          # split files string into list. Divide by spaces
+          changed_files = environ.get("CHANGED_FILES").split(' ')
+          project_images = environ.get("PROJECT_IMAGES").split(' ')
+
+          images_to_build = list()
+
+          # check if image name is a part of changed file path
+          for project_image in project_images:
+            for changed_file in changed_files:
+              if project_image in changed_file:
+                images_to_build.append(project_image)
+                break
+
+          # save retreived images as json array
+          with open(environ.get("GITHUB_OUTPUT"), 'a') as f:
+            f.write(f"IMAGES_TO_BUILD={json.dumps(images_to_build)}\n")
+      - name: Set image names as output for matrix
+        id: set_images
+        run: |
+          echo "output=${{steps.get_images_names.outputs.IMAGES_TO_BUILD}}"

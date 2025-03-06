@@ -18,4 +18,3 @@ WORKDIR  /usr/rfagent
 
 # Run the agent
 ENTRYPOINT ["/usr/rfagent/scripts/entrypoint.sh"]
-       
