@@ -1,4 +1,4 @@
-FROM python:slim-bookworm AS agent-base
+FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
 #  Install all the requirements using pip
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 RUN   pip install rfswarm-agent
@@ -11,14 +11,11 @@ RUN useradd -m rfagent
 # Switch to 'rfagent user'
 USER rfagent
 
-#COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
-#COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
-#COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
+COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
+COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
+COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
 WORKDIR  /usr/rfagent
 
-
-#FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
-FROM  agent-base
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
@@ -59,20 +56,6 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
     && mv firefox /opt/firefox-$FIREFOX_VERSION \
     && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
-#RUN for file in "$TMPDIR/*"; do \
-#        if [ -d $file ]; then \
-#            echo "No downloaded file: $file" && exit 1 ; \
-#        elif [ "$file" == "*.xz" ]; then \
-#            echo"Download file: $file" ; \
-#            xz -d $file && tar cjf /tmp/firefox.tar.bz2 ; \
-#        fi \
-#    done \
-#        && rm -rf /opt/firefox \
-#        && tar -xjf /tmp/firefox.tar.bz2 \
-#        && rm /tmp/firefox.tar.bz2 \
-#        && mv firefox /opt/firefox-$FIREFOX_VERSION \
-#        && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
-
 #  Install geckodriver
 #============
 # GeckoDriver
@@ -103,13 +86,10 @@ RUN firefox --version
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-#COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
-#COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
-#COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
-
-COPY --chown=rfagent  entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
+COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
 COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
-COPY --chmod=765 entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
+COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
+
 WORKDIR  /usr/rfagent
 ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]
 
