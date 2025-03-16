@@ -84,7 +84,7 @@ jobs:
         run: docker network create docker_network
       - name: Run rfswarm agent
         run: |
-          docker run --rm -d --name agent --hostname agent --network docker_network \
+          docker run --rm --name agent --hostname agent --network docker_network \
           rfswarm-image-for-check
       - name: Run rfswarm manager or pass
         run: |

@@ -1,14 +1,33 @@
-FROM  estheniacollaboration/rfswarm-agent-base:latest
+FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
+#  Install all the requirements using pip
+#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
+RUN   pip install rfswarm-agent
+RUN   pip install robotframework-requests
+RUN   pip install robotframework-datadriver
+
+# Create a user 'rfagent'
+RUN useradd -m rfagent
+
+# Switch to 'rfagent user'
+USER rfagent
+
+COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
+COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
+COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
+WORKDIR  /usr/rfagent
+
 ENV   DISPLAY=:0
-ENV   SCREEN_WIDTH 1280
-ENV   SCREEN_HEIGHT 720
-ENV   SCREEN_DEPTH 16
-ENV   PYTHONPATH="${PYTHONPATH}:/src/"
+ENV   SCREEN_WIDTH=1280
+ENV   SCREEN_HEIGHT=720
+ENV   SCREEN_DEPTH=16
+ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent"
 
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
-RUN apt-get update -y \ 
-  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \
+# Switch user root
+USER root
+RUN apt-get update -y \
+  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa xz-utils \
   && rm -rf /var/lib/apt/lists/*
 #  Install robot framework selenium library using pip
 RUN   pip install robotframework-seleniumlibrary      
@@ -20,6 +39,7 @@ RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfon
 #=========
 # Firefox
 #=========
+ARG TMPDIR=/tmp
 ARG FIREFOX_VERSION=latest
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
         FIREFOX_DOWNLOAD_URL=$(if [ $FIREFOX_VERSION = "latest" ] || [ $FIREFOX_VERSION = "beta-latest" ] || [ $FIREFOX_VERSION = "nightly-latest" ] || [ $FIREFOX_VERSION = "devedition-latest" ] || [ $FIREFOX_VERSION = "esr-latest" ]; then echo "https://download.mozilla.org/?product=firefox-$FIREFOX_VERSION-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"; fi) ; \
@@ -28,10 +48,11 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
     fi \
     && apt-get update -qqy \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-    && wget --no-verbose -O /tmp/firefox.tar.bz2 $FIREFOX_DOWNLOAD_URL \
+    && wget --no-verbose -O /tmp/firefox.tar.xz $FIREFOX_DOWNLOAD_URL \
     && rm -rf /opt/firefox \
-    && tar -xjf /tmp/firefox.tar.bz2 \
-    && rm /tmp/firefox.tar.bz2 \
+    && tar xf $TMPDIR/firefox.tar.xz \
+    && ls $TMPDIR/* \
+    && rm $TMPDIR/firefox.tar.xz \
     && mv firefox /opt/firefox-$FIREFOX_VERSION \
     && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
@@ -52,6 +73,9 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
   && chmod 755 /opt/geckodriver-$GK_VERSION \
   && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
+# Switch to custom rfagent user previously created in rfswarm agent base image
+USER rfagent
+
 # We will use this versionning below to display firefox version in the package information  
 #============================================
 # Dumping Browser information 
@@ -60,10 +84,13 @@ RUN echo "firefox"
 RUN firefox --version
 
 #==============================================================
-# Run entrypoint.sh to set virtual display
+# Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY  agent/seleniumlibrary-firefox/entrypoint.sh /opt/bin/entrypoint.sh
-RUN   chmod +x /opt/bin/entrypoint.sh
-ENTRYPOINT [ "/opt/bin/entrypoint.sh" ]
+COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
+COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
+COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
+
+WORKDIR  /usr/rfagent
+ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]
 
    

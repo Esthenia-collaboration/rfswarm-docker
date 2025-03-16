@@ -1,12 +1,14 @@
-FROM  estheniacollaboration/rfswarm-agent-base:latest
+FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
-ENV   PYTHONPATH="${PYTHONPATH}:/src/"
+ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
+# Switch user root
+USER root
 RUN apt-get update -y \
-  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa -y vim \
+  && rm -rf /var/lib/apt/lists/*  
 #  Install robot framework selenium library using pip
 RUN   pip install robotframework-seleniumlibrary      
 #  Install browser's dependencies 
@@ -16,6 +18,11 @@ RUN   apt-get -y update && apt-get install -y wget
 RUN   apt-get install -y libxss1 libappindicator1 
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
-      rm google-chrome-stable_current_amd64.deb   
+      rm google-chrome-stable_current_amd64.deb
+
+# RUN  sudo mount -o rw,relatime,size=2G /dev/shm 
+
+# Switch to custom rfagent user previously created in rfswarm agent base image
+USER rfagent       
 # We will use this versionning below to display google chrome version in the package information      
 RUN   google-chrome --version

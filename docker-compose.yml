@@ -1,11 +1,29 @@
 services:
-  rfswarm_agent_selenium-ff:
+  manager:
+#    tty: true
     build:
-      context: agent
-      dockerfile: seleniumlibrary-firefox/Dockerfile
-    hostname: agent_selenium-firefox    
-    container_name: agent_selenium-firefox
+      context: .
+      dockerfile: manager/Dockerfile
+    hostname: manager
+    container_name: manager
+    networks:
+      - rfswarm
     volumes:
-      - ./tests:/src/product/tests
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    entrypoint: tail -f /dev/null  
+      - ./reports:/src/product/reports
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    ports:
+      - "8138:8138"
+    environment:
+      - DISPLAY=$DISPLAY 
+
+  chrome_agent:
+    build:
+      context: .
+      dockerfile: agent/Dockerfile
+    hostname: agent
+    container_name: agent
+    networks:
+      - rfswarm   
+
+networks:
+  rfswarm:
