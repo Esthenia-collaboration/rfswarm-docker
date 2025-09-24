@@ -1,4 +1,4 @@
-FROM python:slim-bookworm
+FROM python:3.11.4-slim-bullseye
 #  Install all the requirements using pip
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 RUN   pip install rfswarm-agent 
