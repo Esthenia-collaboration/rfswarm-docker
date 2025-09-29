@@ -1,7 +1,7 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
-ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
+ENV   PYTHONPATH="/src/:/usr/rfagent/"
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
 #  Install xvfb interface's dependencies
@@ -11,7 +11,7 @@ RUN apt-get update -y \
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa -y vim \
   && rm -rf /var/lib/apt/lists/*
 #  Install robot framework selenium library using pip
-RUN   pip upgrade 
+RUN   pip install --upgrade pip 
 RUN   pip install robotframework-seleniumlibrary      
 #  Install browser's dependencies 
 RUN   apt-get -y update && apt-get install -y wget
