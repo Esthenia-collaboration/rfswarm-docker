@@ -1,4 +1,4 @@
-FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
+FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
 ENV   PYTHONPATH="/src/:/usr/rfagent/"
