@@ -1,4 +1,5 @@
-FROM python:3.11.4-slim-bullseye
+FROM python:3.13.7-slim
+
 #  Install all the requirements using pip
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 RUN   pip install rfswarm-agent 
@@ -12,8 +13,6 @@ RUN useradd -m rfagent
 USER rfagent
 
 COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
-COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
-COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
 WORKDIR  /usr/rfagent
 
 # Run the agent

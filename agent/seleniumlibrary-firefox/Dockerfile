@@ -1,21 +1,4 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-base-image:latest
-#  Install all the requirements using pip
-#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
-RUN   pip install rfswarm-agent
-RUN   pip install robotframework-requests
-RUN   pip install robotframework-datadriver
-
-# Create a user 'rfagent'
-RUN useradd -m rfagent
-
-# Switch to 'rfagent user'
-USER rfagent
-
-COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/scripts/
-COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
-COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/scripts
-WORKDIR  /usr/rfagent
-
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
@@ -27,14 +10,13 @@ ENV   PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent"
 # Switch user root
 USER root
 RUN apt-get update -y \
-  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa xz-utils \
-  && rm -rf /var/lib/apt/lists/*
+  && apt-get install --no-install-recommends -y vim xvfb xrdp libgl1-mesa-dri mesa-utils dbus-x11 libosmesa6 libglapi-mesa xz-utils \
+  && rm -rf /var/lib/apt/lists/* 
 #  Install robot framework selenium library using pip
-RUN   pip install robotframework-seleniumlibrary      
-#  Install firefox dependencies 
-RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 libdbus-glib-1-dev bzip2 jq 
-
-
+RUN   pip upgrade 
+RUN   pip install robotframework-seleniumlibrary
+#  Install firefox dependencies
+RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 libdbus-glib-1-dev bzip2 jq
 #  Install firefox as browser. The last firefox stable version will be installed.
 #=========
 # Firefox
@@ -52,7 +34,7 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
     && rm -rf /opt/firefox \
     && tar xf $TMPDIR/firefox.tar.xz \
     && ls $TMPDIR/* \
-    && rm $TMPDIR/firefox.tar.xz \
+    && rm /tmp/firefox.tar.xz \
     && mv firefox /opt/firefox-$FIREFOX_VERSION \
     && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
@@ -76,21 +58,17 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
 # Switch to custom rfagent user previously created in rfswarm agent base image
 USER rfagent
 
-# We will use this versionning below to display firefox version in the package information  
+# We will use this versionning below to display firefox version in the package information
 #============================================
-# Dumping Browser information 
+# Dumping Browser information
 #============================================
-RUN echo "firefox" 
+RUN echo "firefox"
 RUN firefox --version
 
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh  /usr/rfagent/entrypoint_firefox.sh
-COPY --chown=rfagent  tests/suites/*  /usr/rfagent/scripts/
+COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh   /usr/rfagent/entrypoint_firefox.sh
 COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
-
 WORKDIR  /usr/rfagent
 ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]
-
-   

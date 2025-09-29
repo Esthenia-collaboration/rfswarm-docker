@@ -28,7 +28,7 @@ jobs:
       - name: Run rfswarm manager
         run: |
           docker run --rm --name manager --hostname manager --network docker_network \
-          -p 8138:8138 -v $(pwd)/manager/scenario:/src/manager/scenario \
+          -p 8138:8138 -v $(pwd)/manager/tests:/src/manager/tests \
           rfswarm-docker-manager
       - name: Clean docker space
         run: |

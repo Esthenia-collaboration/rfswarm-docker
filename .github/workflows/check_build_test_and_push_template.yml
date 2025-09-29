@@ -39,12 +39,12 @@ jobs:
           rfswarm-image-for-check
       - name: Run rfswarm manager or pass
         run: |
-          if ! [ -f $(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
+          if ! [ -f $(pwd)/tests/agent/${{ inputs.IMAGE }}/scenario.rfs ]; then
             echo "Scenario file does not exist, nothing to run."
           else
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
-            --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenario.rfs \
+            --mount type=bind,source=$(pwd)/tests/agent/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenario.rfs \
             -v $(pwd)/tests/suites:/src/tests \
             --mount type=bind,source=$(pwd)/manager/manager.ini,target=/src/manager/manager.ini \
             rfswarm-docker-manager
