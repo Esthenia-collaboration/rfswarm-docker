@@ -34,7 +34,7 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
     && rm -rf /opt/firefox \
     && tar xf $TMPDIR/firefox.tar.xz \
     && ls $TMPDIR/* \
-    && rm /tmp/firefox.tar.xz \
+    && rm $TMPDIR/firefox.tar.xz \
     && mv firefox /opt/firefox-$FIREFOX_VERSION \
     && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 

@@ -1,5 +1,9 @@
 FROM python:3.13.7-slim
 
+ENV PYTHONPATH="/src/:/usr/rfagent/"
+ARG PIP_DISABLE_PIP_VERSION_CHECK=1
+ARG PIP_NO_CACHE_DIR=1
+
 #  Install all the requirements using pip
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 RUN   pip install --upgrade pip

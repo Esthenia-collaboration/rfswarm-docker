@@ -1,7 +1,5 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 #  Install all the requirements using pip
-ARG PIP_DISABLE_PIP_VERSION_CHECK=1
-ARG PIP_NO_CACHE_DIR=1
 USER root
 RUN   pip install --upgrade pip
 RUN   pip install robotframework-sshlibrary

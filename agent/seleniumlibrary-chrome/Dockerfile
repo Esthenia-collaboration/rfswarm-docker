@@ -1,9 +1,6 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
-ENV   PYTHONPATH="/src/:/usr/rfagent/"
-ARG PIP_DISABLE_PIP_VERSION_CHECK=1
-ARG PIP_NO_CACHE_DIR=1
 #  Install xvfb interface's dependencies
 # Switch user root
 USER root
