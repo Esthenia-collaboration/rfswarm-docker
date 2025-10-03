@@ -14,7 +14,6 @@ RUN   pip install robotframework-seleniumlibrary
 RUN   apt-get -y update && apt-get install -y wget
 #  Install google Chrome as browser. The last chrome's stable version will be installed.
 #  No need to install chromedriver while using SeleniumLibrary version 6.4.0 and further. The driver is already included in Selenium Library classes
-# RUN   apt-get install -y libxss1 libappindicator1 
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb

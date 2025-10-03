@@ -3,7 +3,6 @@ ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
 ENV   SCREEN_DEPTH=16
-ENV   PYTHONPATH="/src/:/usr/rfagent/"
 
 #  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
@@ -68,7 +67,7 @@ RUN firefox --version
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh   /usr/rfagent/entrypoint_firefox.sh
-COPY --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint_firefox.sh
+COPY --chown=rfagent  agent/seleniumlibrary-firefox/entrypoint.sh   /usr/rfagent/entrypoint.sh
+RUN --chmod=765 /usr/rfagent/entrypoint.sh
 WORKDIR  /usr/rfagent
-ENTRYPOINT [ "/usr/rfagent/entrypoint_firefox.sh" ]
+ENTRYPOINT [ "/usr/rfagent/entrypoint.sh" ]

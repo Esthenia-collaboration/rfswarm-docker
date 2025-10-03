@@ -1,6 +1,6 @@
 FROM python:3.13.7-slim
 
-ENV PYTHONPATH="/src/:/usr/rfagent/"
+ENV PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
 
@@ -18,7 +18,7 @@ RUN useradd -m rfagent
 USER rfagent
 
 COPY --chown=rfagent  agent/base/entrypoint.sh  /usr/rfagent/
-COPY --chmod=765 agent/base/entrypoint.sh /usr/rfagent/entrypoint.sh
+RUN  --chmod=765 /usr/rfagent/entrypoint.sh
 
 WORKDIR  /usr/rfagent
 
