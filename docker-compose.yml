@@ -9,17 +9,18 @@ services:
     networks:
       - rfswarm
     volumes:
-      - ./reports:/src/product/reports
+      - ./reports:/src/reports
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./tests:/src/tests
     ports:
       - "8138:8138"
     environment:
       - DISPLAY=$DISPLAY 
 
-  chrome_agent:
+  firefox_agent:
     build:
       context: .
-      dockerfile: agent/Dockerfile
+      dockerfile: agent/seleniumlibrary-firefox/Dockerfile
     hostname: agent
     container_name: agent
     networks:
