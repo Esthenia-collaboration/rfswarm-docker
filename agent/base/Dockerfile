@@ -18,7 +18,6 @@ RUN useradd -m rfagent
 USER rfagent
 
 COPY --chown=rfagent --chmod=765 agent/base /usr/rfagent
-# RUN --chmod=765 agent/base/entrypoint.sh /usr/rfagent/entrypoint.sh
 
 WORKDIR  /usr/rfagent
 
