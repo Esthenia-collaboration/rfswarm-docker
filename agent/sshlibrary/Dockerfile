@@ -1,5 +1,7 @@
-FROM  estheniacollaboration/rfswarm-agent-base:latest
+FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 #  Install all the requirements using pip
-#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
+USER root
+RUN   pip install --upgrade pip
 RUN   pip install robotframework-sshlibrary
-
+# Switch to user agent
+USER rfagent
