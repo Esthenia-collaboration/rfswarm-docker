@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.13.7-slim
+FROM python:3.13.9-slim
 
 ENV PYTHONPATH="${PYTHONPATH}:/src/"
 
