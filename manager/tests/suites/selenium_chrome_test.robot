@@ -7,7 +7,7 @@ Documentation     This  test file is used to check
 Suite setup       Open Website     ${URL}  ${BROWSER}
 Suite Teardown    Close all browsers
 
-Resource          keywords.robot
+Resource          selenium_keywords.robot
 
 *** Variables ***
 ${URL}        https://hub.docker.com/r/estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome 
