@@ -2,7 +2,7 @@
 Documentation    This file is a ressource file where keywords are
 ...              gathering.   
 
-Library    SeleniumLibrary
+Library    SeleniumLibrary  
 
 
 *** Variables ***
@@ -39,31 +39,6 @@ Website application has been correctly launched
     sleep   10
     Wait Until Element Is Visible    xpath:${DOCKERHUB_SITE}     5      
     Capture page screenshots
-
-
-
-ssh connection is establish
-    [Arguments]      ${sshserver_IP}
-     ${status}=    Run Keyword And Return Status  Open Connection	${sshserver_IP} prompt=$
-     IF    not ${status} 
-         Fail     "Impossible to open ssh connection"
-     ELSE
-         Log To Console     "Connected"    
-     END
-
-User enter credentials
-    [Arguments]   ${login}  ${pwd}
-    ${output}=	Login	${login}  ${pwd}
-
-ssh connection has been established
-    Log To Console   "connection output is:${output}"
-    ${output}=    Execute Command    uname -a
-    Should Not Be Empty      ${output}
-    Log    Result: ${output}
-
-ssh connection has not been established
-    Log To Console  "Fail ssh connection"    
-
 
 
     

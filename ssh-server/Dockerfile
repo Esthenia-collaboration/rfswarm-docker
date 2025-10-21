@@ -1,9 +1,5 @@
-FROM    python:3.13.9-slim
-
-ENV     PYTHONPATH="${PYTHONPATH}:/src/"
-
-RUN     apt-get -y update && apt-get install -y xvfb tk-dev
-RUN     pip install --upgrade pip && pip install --no-cache-dir --user tk configparser psutil rfswarm-manager
+# Utiliser une image compatible ARM64
+FROM --platform=linux/arm64 python:3.11-slim
 
 #Install ssh server and sudo command line
 RUN apt-get update && \
@@ -18,9 +14,8 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
     sed -i 's/PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && \
     echo 'AllowUsers manageruser' >> /etc/ssh/sshd_config
 
-COPY  manager/entrypoint.sh /opt/bin/entrypoint.sh
-COPY  manager/manager.ini /src/manager/manager.ini
-RUN   chmod +x /opt/bin/entrypoint.sh
-EXPOSE  22
+# expose ssh port
+EXPOSE 22
 
-ENTRYPOINT ["/opt/bin/entrypoint.sh"]
+# run ssh server
+CMD ["/usr/sbin/sshd", "-D"]

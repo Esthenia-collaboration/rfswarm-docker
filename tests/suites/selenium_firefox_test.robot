@@ -7,7 +7,7 @@ Documentation     This  test file is used to check
 Suite Setup       Open Website     ${URL}    ${BROWSER}
 Suite Teardown    Close all browsers
 
-Resource          keywords.robot
+Resource          selenium_keywords.robot
 
 
 *** Variables ***

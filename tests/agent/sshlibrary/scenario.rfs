@@ -1,6 +1,6 @@
 [Scenario]
 uploadmode = err
-scriptcount = 1
+scriptcount = 2
 graphlist =
 
 [1]

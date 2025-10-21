@@ -14,7 +14,6 @@ services:
       - ./tests/suites:/src/tests
     ports:
       - "8138:8138"
-      - "2222:22"
     environment:
       - DISPLAY=$DISPLAY 
 
@@ -26,6 +25,15 @@ services:
     container_name: agent
     networks:
       - rfswarm   
+
+  ssh_server:
+    build:
+      context: .
+      dockerfile: ssh-server/Dockerfile
+    hostname: ssh_server
+    container_name: ssh_server
+    networks:
+      - rfswarm     
 
 networks:
   rfswarm:

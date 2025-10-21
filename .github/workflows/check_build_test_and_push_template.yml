@@ -31,12 +31,22 @@ jobs:
       - name: Build manager image
         run: |
           docker build -t rfswarm-docker-manager -f manager/Dockerfile .
+      - name: Build ssh server image
+        run: | 
+          docker build -t ssh_server  -f ssh-server/Dockerfile . 
       - name: Create network
         run: docker network create docker_network
       - name: Run rfswarm agent
         run: |
           docker run --rm -d --name agent --hostname agent --network docker_network \
           rfswarm-image-for-check
+      - name: Run ssh sever
+        run: |
+          docker run -d \
+            --name ssh_server \
+            --hostname ssh_server \
+            --network docker_network \
+            ssh_server 
       - name: Run rfswarm manager or pass
         run: |
           if ! [ -f $(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
