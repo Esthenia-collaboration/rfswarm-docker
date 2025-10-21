@@ -11,16 +11,17 @@ services:
     volumes:
       - ./reports:/src/reports
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ./tests:/src/tests
+      - ./tests/suites:/src/tests
     ports:
       - "8138:8138"
+      - "2222:22"
     environment:
       - DISPLAY=$DISPLAY 
 
-  firefox_agent:
+  ssh_agent:
     build:
       context: .
-      dockerfile: agent/seleniumlibrary-firefox/Dockerfile
+      dockerfile: agent/sshlibrary/Dockerfile
     hostname: agent
     container_name: agent
     networks:
