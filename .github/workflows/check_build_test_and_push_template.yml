@@ -62,6 +62,7 @@ jobs:
       - name: Clean docker space
         run: |
           docker stop agent;
+          docker stop ssh_server;
           docker network rm docker_network
   push_to_registry:
     name: Push rfswarm ${{ inputs.IMAGE }} image to registry
