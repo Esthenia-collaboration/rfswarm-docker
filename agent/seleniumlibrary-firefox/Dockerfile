@@ -67,6 +67,6 @@ RUN firefox --version
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY --chown=rfagent --chmod=765  agent/seleniumlibrary-firefox  /usr/rfagent
+COPY --chown=rfagent --chmod=765  agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint.sh
 WORKDIR  /usr/rfagent
 ENTRYPOINT [ "/usr/rfagent/entrypoint.sh" ]
