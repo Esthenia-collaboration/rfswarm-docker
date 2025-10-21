@@ -1,5 +1,5 @@
 # Utiliser une image compatible ARM64
-FROM --platform=linux/arm64 python:3.11-slim
+FROM  python:3.11-slim
 
 #Install ssh server and sudo command line
 RUN apt-get update && \
