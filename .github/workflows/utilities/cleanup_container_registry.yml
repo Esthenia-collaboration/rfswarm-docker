@@ -1,0 +1,20 @@
+name: Cleanup Container Registry
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snok/container-retention-policy@v3
+        with:
+          image-names: *
+          cut-off: 30 days ago UTC
+          keep-at-least: 1
+          untagged-only: false
+          skip-tags: latest,main
+          account-type: personal
+          token: ${{ secrets.PAT_TOKEN }}
