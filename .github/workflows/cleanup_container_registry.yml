@@ -10,7 +10,7 @@ jobs:
     name: Delete old container versions
     runs-on: ubuntu-latest
     steps:
-      - uses: snok/container-retention-policy@v3
+      - uses: snok/container-retention-policy@v3.0.1
         with:
           account: Esthenia-collaboration
           token: ${{ secrets.PAT_TOKEN }}
