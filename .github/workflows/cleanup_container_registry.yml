@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: snok/container-retention-policy@v3.0.1
         with:
-          account: Esthenia-collaboration
+          account: user
           token: ${{ secrets.PAT_TOKEN }}
           image-names: "*"
           image-tags: "!latest !main"
