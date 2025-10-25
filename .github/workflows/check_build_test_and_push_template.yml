@@ -55,10 +55,19 @@ jobs:
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
             --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenario.rfs \
-            -v $(pwd)/tests/suites:/src/tests \
-            --mount type=bind,source=$(pwd)/manager/manager.ini,target=/src/manager/manager.ini \
+            -v $(pwd)/tests/suites:/src/tests -v ${{ github.workspace }}/reports:/src/reports \
             rfswarm-docker-manager
           fi
+      - name: Prepare artifact name
+        id: prep
+        run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
+      - name: Archive reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ steps.prep.outputs.image_name_safe }}-${{ inputs.DOCKER_IMAGE_TAG }}
+          path: ${{ github.workspace }}/reports
+          retention-days: 2
       - name: Clean docker space
         run: |
           docker stop agent;
