@@ -32,15 +32,28 @@ jobs:
         run: |
           docker build -t rfswarm-docker-manager -f manager/Dockerfile .
       - name: Build ssh server image
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: | 
           docker build -t ssh_server  -f ssh-server/Dockerfile . 
       - name: Create network
         run: docker network create docker_network
       - name: Run rfswarm agent
+        id: agent_run
         run: |
           docker run --rm -d --name agent --hostname agent --network docker_network \
           rfswarm-image-for-check
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
+      - name: Check test result
+        run: |
+          echo "Robot Framework test running on agent exit code: ${{ steps.agent_run.outputs.exit_code }}"
+          if [ "${{ steps.agent_run.outputs.exit_code }}" -ne 0 ]; then
+            echo  "Test fail"
+            exit 1
+          else
+            echo "Test success"
+          fi    
       - name: Run ssh sever
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: |
           docker run -d \
             --name ssh_server \
@@ -97,4 +110,4 @@ jobs:
       - name: Push image on registry
         run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
 
-        
+
