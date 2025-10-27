@@ -32,6 +32,7 @@ jobs:
         run: |
           docker build -t rfswarm-docker-manager -f manager/Dockerfile .
       - name: Build ssh server image
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: | 
           docker build -t ssh_server  -f ssh-server/Dockerfile . 
       - name: Create network
@@ -39,8 +40,9 @@ jobs:
       - name: Run rfswarm agent
         run: |
           docker run --rm -d --name agent --hostname agent --network docker_network \
-          rfswarm-image-for-check
+          rfswarm-image-for-check  
       - name: Run ssh sever
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: |
           docker run -d \
             --name ssh_server \
@@ -97,4 +99,4 @@ jobs:
           -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):latest \
           -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Push image on registry
-        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
+        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags   
