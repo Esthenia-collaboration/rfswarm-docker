@@ -63,7 +63,7 @@ jobs:
       - name: Check test result
         if: "${{ github.workspace }}/report/output.xml"
         run: |
-          if ! rebot ${{ github.workspace }}/report/output.xml
+          if ! rebot ${{ github.workspace }}/report/output.xml; then
               echo "Test fail"
               exit 1
           else
