@@ -6,6 +6,7 @@ RUN   pip install robotframework-sshlibrary
 # Switch to user agent
 USER rfagent
 
+
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
