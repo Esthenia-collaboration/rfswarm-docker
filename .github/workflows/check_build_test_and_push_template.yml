@@ -40,7 +40,7 @@ jobs:
       - name: Run rfswarm agent
         run: |
           docker run --rm -d --name agent --hostname agent --network docker_network \
-          rfswarm-image-for-check  
+          rfswarm-image-for-check
       - name: Run ssh sever
         if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: |
@@ -61,7 +61,7 @@ jobs:
             --mount type=bind,source=$(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/scenario.rfs \
             -v $(pwd)/manager/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/reports:/src/reports \
             rfswarm-docker-manager
-          fi
+          fi   
       - name: Prepare artifact name
         id: prep
         run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
