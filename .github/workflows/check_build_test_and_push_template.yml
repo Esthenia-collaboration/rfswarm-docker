@@ -96,3 +96,5 @@ jobs:
           -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Push image on registry
         run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
+
+        
