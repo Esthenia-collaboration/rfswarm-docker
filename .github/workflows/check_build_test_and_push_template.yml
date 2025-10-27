@@ -63,13 +63,12 @@ jobs:
       - name: Check test result
         if: "${{ github.workspace }}/report/output.xml"
         run: |
-          ${exit_code} =  rebot ${{ github.workspace }}/report/output.xml
-          if [ ${exit_code} -ne 0 ]; then
-            echo  "Test fail"
-            exit 1
+          if ! rebot ${{ github.workspace }}/report/output.xml
+              echo "Test fail"
+              exit 1
           else
-            echo "Test success"
-          fi        
+              echo "Test success"
+          fi       
       - name: Prepare artifact name
         id: prep
         run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
