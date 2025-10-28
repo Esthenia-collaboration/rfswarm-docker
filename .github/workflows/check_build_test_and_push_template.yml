@@ -72,10 +72,7 @@ jobs:
           retention-days: 2
       - name: Clean docker space
         run: |
-          if [ ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }} ]; then
-            echo "stop ssh server"
-            docker stop ssh_server
-          fi 
+          docker stop ssh_server || true
           docker stop agent;
           docker network rm docker_network 
   push_to_registry:

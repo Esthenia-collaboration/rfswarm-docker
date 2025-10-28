@@ -17,7 +17,6 @@ RUN   apt-get -y update && apt-get install -y wget
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb
-
 # Switch to custom rfagent user previously created in rfswarm agent base image
 USER rfagent
 # We will use this versionning below to display google chrome version in the package information      
