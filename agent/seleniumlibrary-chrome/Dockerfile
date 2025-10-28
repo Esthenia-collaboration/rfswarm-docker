@@ -1,9 +1,9 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 ENV   DISPLAY=:0
 ENV   MPLBACKEND=Agg
-#  Install xvfb interface's dependencies
 # Switch user root
 USER root
+#  Install xvfb interface's dependencies
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa -y vim \
   && rm -rf /var/lib/apt/lists/*
@@ -17,8 +17,6 @@ RUN   apt-get -y update && apt-get install -y wget
 RUN   wget --no-check-certificate https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
       apt-get install -y ./google-chrome-stable_current_amd64.deb && \
       rm google-chrome-stable_current_amd64.deb
-
-# RUN  sudo mount -o rw,relatime,size=2G /dev/shm
 
 # Switch to custom rfagent user previously created in rfswarm agent base image
 USER rfagent
