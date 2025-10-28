@@ -1,0 +1,20 @@
+name: Cleanup Container Registry
+
+on:
+  schedule:
+    - cron: '0 3 * * 0'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    name: Delete old container versions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: snok/container-retention-policy@v3.0.1
+        with:
+          account: user
+          token: ${{ secrets.PAT_TOKEN }}
+          image-names: "*"
+          image-tags: "!latest !main"
+          tag-selection: both
+          cut-off: 10d
