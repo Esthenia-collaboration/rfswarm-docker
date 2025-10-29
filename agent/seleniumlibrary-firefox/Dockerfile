@@ -12,6 +12,7 @@ USER root
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y vim xvfb xrdp libgl1-mesa-dri mesa-utils dbus-x11 libosmesa6 libglapi-mesa xz-utils \
   && rm -rf /var/lib/apt/lists/*
+  
 #  Install robot framework selenium library using pip
 RUN   pip install --upgrade pip
 RUN   pip install robotframework-seleniumlibrary
