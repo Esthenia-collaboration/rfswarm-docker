@@ -9,4 +9,4 @@ delay = 0
 rampup = 10
 run = 30
 test = RFSwarm Demo Test
-script = /src/tests/rfswarm.robot
+script = ../../rfswarm.robot

@@ -9,4 +9,4 @@ delay = 0
 rampup = 10
 run = 30
 test = User launch a website
-script = /src/tests/selenium_firefox_test.robot
+script = ../../scripts/selenium_firefox_test.robot

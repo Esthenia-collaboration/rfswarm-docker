@@ -1,7 +1,10 @@
 # ignores all .DS_store files
 *.DS_Store
-.env
+# .env
 .idea
 
 # does not ignore the README.md file
 !README.md
+
+reports/
+clean_reports.sh
