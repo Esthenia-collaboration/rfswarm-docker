@@ -26,7 +26,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Check that the image builds
+      - name: Check that the agent image builds
         run: docker build -t rfswarm-image-for-check -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Build manager image
         run: |
@@ -44,8 +44,10 @@ jobs:
           else
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
-            --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenario.rfs \
-            -v $(pwd)/tests/suites:/src/tests -v ${{ github.workspace }}/reports:/src/reports \
+            -e SCENARIO_FILE=/src/manager/scenarios/scenario.rfs \
+            -e LOG_LEVEL=3 \
+            --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/scenario.rfs \
+            -v $(pwd)/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/reports:/src/reports \
             rfswarm-docker-manager
           fi
       - name: Prepare artifact name
