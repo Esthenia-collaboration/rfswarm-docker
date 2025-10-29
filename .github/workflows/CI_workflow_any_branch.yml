@@ -9,7 +9,6 @@ on:
       - 'agent/seleniumlibrary-chrome/**'
       - 'agent/sshlibrary/**'
       - 'agent/seleniumlibrary-firefox/**'
-      - 'manager/**'
 
 env:
   BASE_IMAGE: "agent/base"

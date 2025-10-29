@@ -1,4 +1,5 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
+
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
