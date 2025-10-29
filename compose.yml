@@ -14,7 +14,7 @@ services:
       DISPLAY: $DISPLAY # mandatory to launch in GUI mode
       PORT: # default: 8138
       CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
-      SCENARIO_FILE: /src/manager/scenarios/seleniumlibrary-firefox/scenario.rfs # mandatoty to launch a scenario
+      SCENARIO_FILE: /src/manager/scenarios/seleniumlibrary-firefox/scenario.rfs # mandatory to launch a scenario
       LOG_LEVEL: 3 # 1-5, default: 0
       DISPLAY_GUI: # true, yes, 1, default: false
       RUN_AUTOMATICALLY: # true, yes, 1, default: false

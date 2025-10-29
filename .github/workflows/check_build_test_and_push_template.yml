@@ -44,7 +44,7 @@ jobs:
           else
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
-            -e SCENARIO_FILE=/src/manager/scenarios/scenario.rfs \
+            -e SCENARIO_FILE="/src/manager/scenarios/scenario.rfs" \
             -e LOG_LEVEL=3 \
             --mount type=bind,source=$(pwd)/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/scenario.rfs \
             -v $(pwd)/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/reports:/src/reports \
