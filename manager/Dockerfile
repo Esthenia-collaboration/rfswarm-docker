@@ -10,8 +10,7 @@ RUN pip install --upgrade pip \
     && pip install --no-cache-dir --user tk configparser psutil rfswarm-manager
 
 COPY manager/entrypoint.sh /opt/bin/entrypoint.sh
-COPY manager/configuration/manager.ini /src/manager/manager.ini
-COPY tests/agent/seleniumlibrary-firefox/scenario.rfs /src/manager/scenario.rfs
+COPY manager/configuration/manager.ini /src/manager/configuration/manager.ini
 RUN chmod +x /opt/bin/entrypoint.sh
 
 WORKDIR /root/.local/lib/python3.13/site-packages/rfswarm_manager/

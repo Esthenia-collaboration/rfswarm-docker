@@ -4,12 +4,16 @@
 ARGS="$@"
 
 # default values
-CONFIG_FILE=${CONFIG_FILE:-/src/manager/manager.ini}
-SCENARIO_FILE=${SCENARIO_FILE:-/src/manager/scenario.rfs}
+CONFIG_FILE=${CONFIG_FILE:-/src/manager/configuration/manager.ini}
+SCENARIO_FILE=${SCENARIO_FILE}
 PORT=${PORT:-8138}
-LOG_LEVEL=${LOG_LEVEL:-3}
+LOG_LEVEL=${LOG_LEVEL:-0}
 DISPLAY_GUI=${DISPLAY_GUI:-false}
 RUN_AUTOMATICALLY=${RUN_AUTOMATICALLY:-false}
+
+if [ -n "$SCENARIO_FILE" ]; then
+    ARGS="--scenario $SCENARIO_FILE $ARGS"
+fi
 
 # convert DISPLAY_GUI to lower case
 DISPLAY_GUI_LOWER=$(echo "$DISPLAY_GUI" | tr '[:upper:]' '[:lower:]')
@@ -27,7 +31,7 @@ if [ "$RUN_AUTOMATICALLY_LOWER" = "true" ] || [ "$RUN_AUTOMATICALLY_LOWER" = "ye
 fi
 
 echo 'Manager Started'
-COMMAND="python rfswarm.py --port $PORT --ini $CONFIG_FILE --scenario $SCENARIO_FILE --debug $LOG_LEVEL $ARGS"
+COMMAND="python rfswarm.py --port $PORT --ini $CONFIG_FILE --debug $LOG_LEVEL $ARGS"
 echo "Run commande ==> $COMMAND"
 exec $COMMAND
 echo 'Manager down correctly'
