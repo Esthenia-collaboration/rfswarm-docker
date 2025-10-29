@@ -16,4 +16,3 @@ RUN chmod +x /opt/bin/entrypoint.sh
 WORKDIR /root/.local/lib/python3.13/site-packages/rfswarm_manager/
 
 ENTRYPOINT ["/opt/bin/entrypoint.sh"]
-
