@@ -1,0 +1,15 @@
+Plan:
+  scriptdir: /src/tests
+  scenariodir: /src/tests
+  scenariofile: /src/manager/scenario.rfs
+
+Run:
+  resultsdir: /src/reports
+  display_index: False
+  display_iteration: False
+  display_sequence: False
+  display_percentile: 90
+
+Server:
+  bindip:
+  bindport: 8138
