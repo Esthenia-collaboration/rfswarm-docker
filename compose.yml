@@ -1,11 +1,12 @@
 services:
   manager:
     build:
-      context: .
-      dockerfile: manager/Dockerfile
+      context: manager
+      dockerfile: Dockerfile
     hostname: manager
     ports:
-      - "8138:${PORT}"
+      - "8138:8138" # you need to update container port as "8138:${PORT}". If PORT=8139 use 8138:8139
+      # - "8138:${PORT}" # uncomment if you use a .env file as .env.example
     security_opt:
       - no-new-privileges:true
     networks:
@@ -18,9 +19,13 @@ services:
       LOG_LEVEL: 3 # 1-5, default: 0
       DISPLAY_GUI: # true, yes, 1, default: false
       RUN_AUTOMATICALLY: # true, yes, 1, default: false
+      AGENTS:
+      RESULTS_DIR:
+      # IPADDRESS:
+      # STARTTIME:
     volumes:
-      - ./tests/agent:/src/manager/scenarios
-      - ./tests/suites:/src/manager/scripts
+      - ./manager/tests/agent:/src/manager/scenarios
+      - ./manager/tests/suites:/src/manager/scripts
       - ./manager/configuration:/src/manager/configuration
       - ./reports:/src/reports
       - /tmp/.X11-unix:/tmp/.X11-unix:rw

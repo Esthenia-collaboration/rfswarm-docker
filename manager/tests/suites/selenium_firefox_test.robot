@@ -22,5 +22,3 @@ User launch a website
     Website application has been correctly launched    ${URL}
     Log To Console    ${BROWSER} launch sucess
     sleep    40
-
-
