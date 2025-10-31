@@ -1,8 +1,8 @@
 services:
   manager:
     build:
-      context: manager
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: manager/Dockerfile
     hostname: manager
     ports:
       - "8138:8138" # you need to update container port as "8138:${PORT}". If PORT=8139 use 8138:8139
