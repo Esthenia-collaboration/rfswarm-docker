@@ -1,4 +1,5 @@
 FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
+
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
@@ -10,10 +11,11 @@ ENV   SCREEN_DEPTH=16
 USER root
 RUN apt-get update -y \
   && apt-get install --no-install-recommends -y vim xvfb xrdp libgl1-mesa-dri mesa-utils dbus-x11 libosmesa6 libglapi-mesa xz-utils \
-  && rm -rf /var/lib/apt/lists/* 
+  && rm -rf /var/lib/apt/lists/*
 #  Install robot framework selenium library using pip
 RUN   pip install --upgrade pip
 RUN   pip install robotframework-seleniumlibrary
+
 #  Install firefox dependencies
 RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 libdbus-glib-1-dev bzip2 jq
 #  Install firefox as browser. The last firefox stable version will be installed.
@@ -67,6 +69,6 @@ RUN firefox --version
 #==============================================================
 # Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY --chown=rfagent --chmod=765  agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint.sh
+COPY --chown=rfagent --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /usr/rfagent/entrypoint.sh
 WORKDIR  /usr/rfagent
 ENTRYPOINT [ "/usr/rfagent/entrypoint.sh" ]

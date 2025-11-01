@@ -8,5 +8,5 @@ robots = 1
 delay = 0
 rampup = 10
 run = 30
-test = User launch a website
-script = /src/tests/selenium_chrome_test.robot
+test = RFSwarm Demo Test
+script = /src/manager/scripts/rfswarm.robot

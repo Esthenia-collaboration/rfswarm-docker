@@ -7,17 +7,18 @@ Library         OperatingSystem
 
 *** Variables ***
 ${PATH}         ${CURDIR}/example.txt
-${alpha}	abcdefghijklmnopqrstuvwxyz
-${alpha10}	${alpha * 10}
-${alpha100}	${alpha10 * 10}
-${alpha1k}	${alpha100 * 10}
-${FPATH}	${CURDIR}/Robot_${RFS_ROBOT}
+${alpha}	    abcdefghijklmnopqrstuvwxyz
+${alpha10}	    ${alpha * 10}
+${alpha100}	    ${alpha10 * 10}
+${alpha1k}	    ${alpha100 * 10}
+${FPATH}	    ${CURDIR}/Robot_${RFS_ROBOT}
 
 *** Test Cases ***
 RFSwarm Demo Test
 	# Create File          ${PATH}    Some text
 	# File Should Exist    ${PATH}
 	# Copy File            ${PATH}    ~/file.txt
+	Log To Console    ${CURDIR}
 	Create Some Files
 	Sleep    5
 
@@ -50,14 +51,11 @@ Remove Some Files
 
 RFS Variables
 	[Documentation]		Show the RFS Variables
-	Log		{RFS_AGENTNAME}
-	Log		{RFS_AGENTVERSION}
-	Log		{RFS_DEBUGLEVEL}
-	Log		{RFS_EXCLUDELIBRARIES}
-	Log		{RFS_INDEX}
-	Log		{RFS_ITERATION}
-	Log		{RFS_ROBOT}
-	Log		{RFS_SWARMMANAGER}
-
-
-#
+	Log		${RFS_AGENTNAME}
+	Log		${RFS_AGENTVERSION}
+	Log		${RFS_DEBUGLEVEL}
+	Log		${RFS_EXCLUDELIBRARIES}
+	Log		${RFS_INDEX}
+	Log		${RFS_ITERATION}
+	Log		${RFS_ROBOT}
+	Log		${RFS_SWARMMANAGER}

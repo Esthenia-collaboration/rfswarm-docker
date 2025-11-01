@@ -1,0 +1,18 @@
+{
+    "Plan": {
+        "scriptdir": "/src/manager/scripts",
+        "scenariodir": "/src/manager/scenarios",
+        "scenariofile": ""
+    },
+    "Run": {
+        "resultsdir": "/src/reports",
+        "display_index": "False",
+        "display_iteration": "False",
+        "display_sequence": "False",
+        "display_percentile": 90
+    },
+    "Server": {
+        "bindip": "",
+        "bindport": 8138
+    }
+}
