@@ -21,8 +21,8 @@ services:
       RUN_AUTOMATICALLY: # true, yes, 1, default: false
       AGENTS:
       RESULTS_DIR:
-      # IPADDRESS:
-      # STARTTIME:
+      IPADDRESS:
+      STARTTIME:
     volumes:
       - ./manager/tests/agent:/src/manager/scenarios
       - ./manager/tests/suites:/src/manager/scripts
