@@ -43,15 +43,11 @@ jobs:
             echo "Scenario file does not exist, nothing to run."
           else
             DIR_NAME="results_${{ github.run_id }}"
-            SCENARIO_NAME="scenario_${{ github.run_id }}"
-            cat << EOF
-            ========================================
-            Scenario: $SCENARIO_NAME
-            Directory: $DIR_NAME
-            ========================================
-            EOF
             echo "dir_name=$DIR_NAME" >> $GITHUB_OUTPUT
+            echo "dir_name=$DIR_NAME"
+            SCENARIO_NAME="scenario_${{ github.run_id }}"
             echo "scenario_name=$SCENARIO_NAME" >> $GITHUB_OUTPUT
+            echo "scenario_name=$SCENARIO_NAME"
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
             -e SCENARIO_FILE="/src/manager/scenarios/$SCENARIO_NAME.rfs" \
