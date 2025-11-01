@@ -42,13 +42,46 @@ jobs:
           if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
             echo "Scenario file does not exist, nothing to run."
           else
+            DIR_NAME="results_${{ github.run_id }}"
+            SCENARIO_NAME="scenario_${{ github.run_id }}"
+            echo "dir_name=$DIR_NAME" >> $GITHUB_OUTPUT
+            echo "scenario_name=$SCENARIO_NAME" >> $GITHUB_OUTPUT
             docker run --rm --name manager --hostname manager --network docker_network \
             -p 8138:8138 \
             -e SCENARIO_FILE="/src/manager/scenarios/scenario.rfs" \
             -e LOG_LEVEL=3 \
-            --mount type=bind,source=$(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/scenario.rfs \
-            -v $(pwd)/manager/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/reports:/src/reports \
+            --mount type=bind,source=$(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/$SCENARIO_NAME.rfs \
+            -v $(pwd)/manager/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/$DIR_NAME:/src/reports \
             rfswarm-docker-manager
+          fi
+      - name: Check tests result status
+        run: |
+          if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
+            echo "Scenario file does not exist, nothing to run."
+          else
+            DIR_NAME="${{ steps.run_scenario.outputs.dir_name }}"
+            SCENARIO_NAME="${{ steps.run_scenario.outputs.scenario_name }}"
+
+            # Find the subdirectory containing SCENARIO_NAME
+            SCENARIO_DIR=$(find "${{ github.workspace }}/$DIR_NAME" -type d -name "*$SCENARIO_NAME*" | head -n 1)
+            
+            if [ -z "$SCENARIO_DIR" ]; then
+              echo "❌ Scenario directory not found"
+              exit 1
+            fi
+            
+            # Extract the directory name (without path)
+            SCENARIO_DIR_NAME=$(basename "$SCENARIO_DIR")
+            
+            # Build the exact path to the database file
+            DB_FILE="$SCENARIO_DIR/$SCENARIO_DIR_NAME.db"
+            
+            if [ ! -f "$DB_FILE" ]; then
+              echo "❌ Database file not found: $DB_FILE"
+              exit 1
+            fi
+            
+            echo "✅ Database found: $DB_FILE"
           fi
       - name: Prepare artifact name
         id: prep
