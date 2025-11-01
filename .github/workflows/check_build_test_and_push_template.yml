@@ -101,8 +101,8 @@ jobs:
             LEFT JOIN MetricData md on r.script_index = md.PrimaryMetric and md.MetricType = 'Scenario_Test'
             WHERE result = 'FAIL'
             group by script_index, robot, iteration, result;
-            EOF
-            )
+          EOF
+          )
             RESULT=$(sqlite3 "$DB_FILE" "$QUERY")
             echo "result = $RESULT"
 
