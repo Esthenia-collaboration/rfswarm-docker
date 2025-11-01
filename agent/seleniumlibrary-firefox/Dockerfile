@@ -4,7 +4,6 @@ ENV   SCREEN_WIDTH=1280
 ENV   SCREEN_HEIGHT=720
 ENV   SCREEN_DEPTH=16
 
-#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
 #  Install xvfb interface's dependencies
 # Switch user root
 USER root
