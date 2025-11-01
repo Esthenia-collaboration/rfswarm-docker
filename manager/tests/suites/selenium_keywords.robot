@@ -38,4 +38,5 @@ Website application has been correctly launched
     Go To 	${url}
     sleep   10
     Wait Until Element Is Visible    xpath:${DOCKERHUB_SITE}     5      
-    Capture Page screenshot
+    Capture Page Screenshot
+
