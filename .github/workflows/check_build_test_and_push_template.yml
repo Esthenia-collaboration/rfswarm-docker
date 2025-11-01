@@ -104,14 +104,21 @@ jobs:
           EOF
           )
             RESULT=$(sqlite3 "$DB_FILE" "$QUERY")
-            echo "result = $RESULT"
+            echo "failure results:\n$RESULT"
 
             if [ -n "$RESULT" ]; then
-              echo "❌ Table contains FAIL rows"
-              sqlite3 -header -csv "$DB_FILE" "$DB_FILE" "$QUERY" > "${{ github.workspace }}/tests_status.csv"
+              echo "❌ Scenario contains FAIL rows"
+              # sqlite3 -header -csv "$DB_FILE" "$DB_FILE" "$QUERY" > "${{ github.workspace }}/tests_status.csv"
               exit 1
             fi
           fi
+      # - name: Upload tests results
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: query-results
+      #     path: |
+      #       tests_status.csv
+      #       ${{ steps.run_scenario.outputs.dir_name }}/**/*.db
       - name: Prepare artifact name
         id: prep
         run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
@@ -120,7 +127,7 @@ jobs:
         if: always()
         with:
           name: ${{ steps.prep.outputs.image_name_safe }}-${{ inputs.DOCKER_IMAGE_TAG }}
-          path: ${{ github.workspace }}/reports
+          path: ${{ github.workspace }}/results_${{ github.run_id }}
           retention-days: 2
       - name: Clean docker space
         run: |
