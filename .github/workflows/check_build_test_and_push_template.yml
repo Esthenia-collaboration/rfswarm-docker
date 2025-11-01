@@ -62,8 +62,11 @@ jobs:
           if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
             echo "Scenario file does not exist, nothing to run."
           else
-            DIR_NAME="${{ steps.run_scenario.outputs.dir_name }}"
-            SCENARIO_NAME="${{ steps.run_scenario.outputs.scenario_name }}"
+            # DIR_NAME="${{ steps.run_scenario.outputs.dir_name }}"
+            # SCENARIO_NAME="${{ steps.run_scenario.outputs.scenario_name }}"
+
+            DIR_NAME="results_${{ github.run_id }}"
+            SCENARIO_NAME="scenario_${{ github.run_id }}"
 
             # Find the subdirectory containing SCENARIO_NAME
             SCENARIO_DIR=$(find "${{ github.workspace }}/$DIR_NAME" -type d -name "*$SCENARIO_NAME*" | head -n 1)
