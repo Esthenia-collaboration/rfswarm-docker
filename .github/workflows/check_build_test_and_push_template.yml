@@ -74,7 +74,7 @@ jobs:
         run: |
           docker stop ssh_server || true
           docker stop agent;
-          docker network rm docker_network 
+          docker network rm docker_network
   push_to_registry:
     name: Push rfswarm ${{ inputs.IMAGE }} image to registry
     needs:
