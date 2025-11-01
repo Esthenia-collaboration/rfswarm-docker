@@ -1,0 +1,60 @@
+services:
+  manager:
+    build:
+      context: .
+      dockerfile: manager/Dockerfile
+    hostname: manager
+    ports:
+      - "8138:8138" # you need to update container port as "8138:${PORT}". If PORT=8139 use 8138:8139
+      # - "8138:${PORT}" # uncomment if you use a .env file as .env.example
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    environment:
+      DISPLAY: $DISPLAY # mandatory to launch in GUI mode
+      PORT: # default: 8138
+      CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
+      SCENARIO_FILE: /src/manager/scenarios/seleniumlibrary-firefox/scenario.rfs # mandatory to launch a scenario
+      LOG_LEVEL: 3 # 1-5, default: 0
+      DISPLAY_GUI: # true, yes, 1, default: false
+      RUN_AUTOMATICALLY: # true, yes, 1, default: false
+      AGENTS:
+      RESULTS_DIR:
+      # IPADDRESS:
+      # STARTTIME:
+    volumes:
+      - ./manager/tests/agent:/src/manager/scenarios
+      - ./manager/tests/suites:/src/manager/scripts
+      - ./manager/configuration:/src/manager/configuration
+      - ./reports:/src/reports
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: manager
+
+  firefox_agent:
+    build:
+      context: .
+      dockerfile: agent/seleniumlibrary-firefox/Dockerfile
+    hostname: agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: agent
+
+networks:
+  rfswarm:
+    name: rfswarm
