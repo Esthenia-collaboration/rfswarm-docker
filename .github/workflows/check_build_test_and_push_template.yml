@@ -58,6 +58,7 @@ jobs:
             rfswarm-docker-manager
           fi
       - name: Check tests result status
+        id: check_status
         run: |
           if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
             echo "Scenario file does not exist, nothing to run."
@@ -88,6 +89,27 @@ jobs:
             fi
             
             echo "✅ Database found: $DB_FILE"
+            QUERY=$(cat << 'EOF'
+            SELECT
+              script_index,
+              robot,
+              iteration,
+              result,
+              md.SecondaryMetric,
+              md.MetricValue
+            FROM Results r
+            LEFT JOIN MetricData md on r.script_index = md.PrimaryMetric and md.MetricType = 'Scenario_Test'
+            WHERE result = 'FAIL'
+            group by script_index, robot, iteration, result;
+            EOF)
+            RESULT=$(sqlite3 "$DB_FILE" "$QUERY")
+            echo "result = $RESULT"
+
+            if [ -n "$RESULT" ]; then
+              echo "❌ Table contains FAIL rows"
+              sqlite3 -header -csv "$DB_FILE" "$DB_FILE" "$QUERY" > "${{ github.workspace }}/tests_status.csv"
+              exit 1
+            fi
           fi
       - name: Prepare artifact name
         id: prep

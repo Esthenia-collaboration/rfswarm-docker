@@ -8,4 +8,6 @@
 !README.md
 
 reports/
+results/
+db/
 clean_reports.sh
