@@ -19,16 +19,16 @@ services:
       LOG_LEVEL: 3 # 1-5, default: 0
       DISPLAY_GUI: # true, yes, 1, default: false
       RUN_AUTOMATICALLY: # true, yes, 1, default: false
-      AGENTS:
-      RESULTS_DIR:
+      AGENTS: # default: 1
+      RESULTS_DIR: # default: /src/reports
       IPADDRESS:
       STARTTIME:
     volumes:
-      - ./manager/tests/agent:/src/manager/scenarios
-      - ./manager/tests/suites:/src/manager/scripts
+      - ./manager/tests/agent:/src/manager/scenarios # default scenariodir
+      - ./manager/tests/suites:/src/manager/scripts # default scriptdir
       - ./manager/configuration:/src/manager/configuration
-      - ./reports:/src/reports
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ./reports:/src/reports # default resultsdir
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw # mandatory to launch in GUI mode
     logging:
       driver: "json-file"
       options:
