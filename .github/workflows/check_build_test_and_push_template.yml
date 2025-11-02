@@ -57,6 +57,7 @@ jobs:
             -v $(pwd)/manager/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/$DIR_NAME:/src/reports \
             rfswarm-docker-manager
           fi
+        shell: bash
       - name: Check tests result status
         id: check_status
         run: |
@@ -113,6 +114,7 @@ jobs:
               exit 1
             fi
           fi
+        shell: bash
       - name: Upload tests results
         uses: actions/upload-artifact@v4
         if: failure() && steps.check_status.outcome == 'failure'
