@@ -73,7 +73,7 @@ jobs:
             SCENARIO_DIR=$(find "${{ github.workspace }}/$DIR_NAME" -type d -name "*$SCENARIO_NAME*" | head -n 1)
             
             if [ -z "$SCENARIO_DIR" ]; then
-              echo "❌ ::error::Scenario directory not found"
+              echo "::error::❌ Scenario directory not found"
               exit 1
             fi
             
@@ -84,11 +84,11 @@ jobs:
             DB_FILE="$SCENARIO_DIR/$SCENARIO_DIR_NAME.db"
             
             if [ ! -f "$DB_FILE" ]; then
-              echo "❌ ::error::Database file not found: $DB_FILE"
+              echo "::error::❌ Database file not found: $DB_FILE"
               exit 1
             fi
             
-            echo "✅ ::notice::Database found: $DB_FILE"
+            echo "::notice::✅ Database found: $DB_FILE"
             QUERY=$(cat << 'EOF'
             SELECT
               script_index,
@@ -108,7 +108,7 @@ jobs:
             echo "$RESULT"
 
             if [ -n "$RESULT" ]; then
-              echo "❌ ::error::Scenario contains FAIL rows"
+              echo "::error::❌ Scenario contains FAIL rows"
               sqlite3 -header -csv "$DB_FILE" "$QUERY" > "${{ github.workspace }}/tests_status.csv"
               exit 1
             fi

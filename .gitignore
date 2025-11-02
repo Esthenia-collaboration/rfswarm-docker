@@ -11,3 +11,4 @@ reports/
 results/
 db/
 clean_reports.sh
+compose_db_test.yml
