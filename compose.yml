@@ -54,6 +54,7 @@ services:
         max-size: "10m"
         max-file: "10"
     container_name: agent
+
   ssh_server:
     build:
       context: .

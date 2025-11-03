@@ -41,7 +41,3 @@ ssh connection has not been established
 
 Close ssh connection
     Close Connection 
-
-
-
-    

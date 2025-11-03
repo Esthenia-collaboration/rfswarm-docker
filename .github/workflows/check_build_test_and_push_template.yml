@@ -34,7 +34,7 @@ jobs:
       - name: Build ssh server image
         if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: | 
-          docker build -t ssh_server  -f ssh-server/Dockerfile . 
+          docker build -t ssh_server -f ssh-server/Dockerfile . 
       - name: Create network
         run: docker network create docker_network
       - name: Run rfswarm agent
@@ -127,16 +127,16 @@ jobs:
             fi
           fi
         shell: bash
-      - name: Upload tests results
-        uses: actions/upload-artifact@v4
-        if: failure() && steps.check_status.outcome == 'failure'
-        with:
-          name: failures_status-${{ inputs.DOCKER_IMAGE_TAG }}
-          path: ${{ github.workspace }}/failures_status.csv
       - name: Prepare artifact name
         id: prep
         if: always()
         run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
+      - name: Upload tests results
+        uses: actions/upload-artifact@v4
+        if: failure() && steps.check_status.outcome == 'failure'
+        with:
+          name: failures_status-${{ steps.prep.outputs.image_name_safe }}-${{ inputs.DOCKER_IMAGE_TAG }}
+          path: ${{ github.workspace }}/failures_status.csv
       - name: Archive reports
         uses: actions/upload-artifact@v4
         if: always()
@@ -171,4 +171,4 @@ jobs:
           -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):latest \
           -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Push image on registry
-        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags   
+        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
