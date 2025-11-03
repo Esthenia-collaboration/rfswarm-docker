@@ -56,7 +56,8 @@ jobs:
       fail-fast: false
       matrix:
         image: ${{ fromJson(needs.update_images_to_build.outputs.IMAGES_TO_BUILD) }}
-    uses: Esthenia-collaboration/rfswarm-docker/.github/workflows/check_build_test_and_push_template.yml@main
+    # uses: Esthenia-collaboration/rfswarm-docker/.github/workflows/check_build_test_and_push_template.yml@main
+    uses: ./.github/workflows/check_build_test_and_push_template.yml
     with:
       IMAGE: ${{ matrix.image }}
       REGISTRY_URL: docker.io
