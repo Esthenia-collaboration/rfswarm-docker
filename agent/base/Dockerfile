@@ -4,7 +4,7 @@ ENV PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
 
-#  Install all the requirements using pip, add pip upgrade
+#  Install all the requirements using pip, add pip upgrade.
 RUN pip install --upgrade pip
 RUN pip install rfswarm-agent \
         robotframework-requests \

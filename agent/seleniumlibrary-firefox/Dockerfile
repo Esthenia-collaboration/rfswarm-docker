@@ -14,6 +14,7 @@ RUN apt-get update -y \
 #  Install robot framework selenium library using pip
 RUN   pip install --upgrade pip
 RUN   pip install robotframework-seleniumlibrary
+
 #  Install firefox dependencies
 RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 libdbus-glib-1-dev bzip2 jq
 #  Install firefox as browser. The last firefox stable version will be installed.
