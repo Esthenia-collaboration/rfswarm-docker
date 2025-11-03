@@ -26,6 +26,3 @@ Failing ssh connection
     Given ssh connection is setup     ${FAKESSHSERVER}
     Then ssh connection has not been established     ${LOGIN}  ${PWD} 
     And Close ssh connection
-
-
-

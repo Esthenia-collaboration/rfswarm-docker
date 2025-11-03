@@ -5,18 +5,29 @@ ARGS="$@"
 
 # default values
 CONFIG_FILE=${CONFIG_FILE:-/src/manager/configuration/manager.ini}
-SCENARIO_FILE=${SCENARIO_FILE}
-PORT=${PORT:-8138}
 LOG_LEVEL=${LOG_LEVEL:-0}
 DISPLAY_GUI=${DISPLAY_GUI:-false}
 RUN_AUTOMATICALLY=${RUN_AUTOMATICALLY:-false}
 AGENTS=${AGENTS:-1}
-RESULTS_DIR=${RESULTS_DIR:-/src/reports}
-# IPADDRESS=${IPADDRESS:-manager}
-# STARTTIME
+
+if [ -n "$PORT" ]; then
+    ARGS="--port $PORT $ARGS"
+fi
 
 if [ -n "$SCENARIO_FILE" ]; then
     ARGS="--scenario $SCENARIO_FILE $ARGS"
+fi
+
+if [ -n "$RESULTS_DIR" ]; then
+    ARGS="--dir $RESULTS_DIR $ARGS"
+fi
+
+if [ -n "$IPADDRESS" ]; then
+    ARGS="--ipaddress $IPADDRESS $ARGS"
+fi
+
+if [ -n "$STARTTIME" ]; then
+    ARGS="--starttime $STARTTIME $ARGS"
 fi
 
 # convert DISPLAY_GUI to lower case
@@ -35,7 +46,7 @@ if [ "$RUN_AUTOMATICALLY_LOWER" = "true" ] || [ "$RUN_AUTOMATICALLY_LOWER" = "ye
 fi
 
 echo 'Manager Started'
-COMMAND="python rfswarm.py --port $PORT --ini $CONFIG_FILE --debug $LOG_LEVEL --agents $AGENTS --dir $RESULTS_DIR $ARGS"
+COMMAND="python rfswarm.py --ini $CONFIG_FILE --debug $LOG_LEVEL --agents $AGENTS $ARGS"
 echo "Run commande ==> $COMMAND"
 exec $COMMAND
 echo 'Manager down correctly'
