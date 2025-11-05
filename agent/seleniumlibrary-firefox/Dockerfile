@@ -1,4 +1,7 @@
-FROM  ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
+ARG DOCKER_REGISTRY="ghcr.io"
+ARG DOCKER_IMAGE="/esthenia-collaboration/rfswarm-agent-base"
+ARG DOCKER_IMAGE_VERSION="latest"
+FROM ${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
 
 ENV   DISPLAY=:0
 ENV   SCREEN_WIDTH=1280
