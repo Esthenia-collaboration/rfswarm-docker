@@ -9,4 +9,4 @@ USER root
 RUN pip install --upgrade pip \
     && pip install robotframework-sshlibrary
 
-USER rfswarm
+USER rfagent
