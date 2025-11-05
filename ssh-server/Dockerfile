@@ -1,3 +1,5 @@
+# syntax=docker/dockerfile:1
+
 # Utiliser une image compatible ARM64
 FROM  python:3.11-slim
 
