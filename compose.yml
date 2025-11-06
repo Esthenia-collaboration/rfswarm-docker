@@ -15,9 +15,6 @@ services:
       DISPLAY: $DISPLAY # mandatory to launch in GUI mode
       PORT: # default: 8138
       CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
-      # SCENARIO_FILE: /src/manager/scenarios/sshlibrary/scenario.rfs # mandatory to launch a scenario
-      SCENARIO_FILE: /src/manager/scenarios/seleniumlibrary-chrome/scenario.rfs # mandatory to launch a scenario
-      # SCENARIO_FILE: /src/manager/scenarios/seleniumlibrary-firefox/scenario.rfs # mandatory to launch a scenario
       LOG_LEVEL: 3 # 1-5, default: 0
       DISPLAY_GUI: # true, yes, 1, default: false
       RUN_AUTOMATICALLY: # true, yes, 1, default: false
@@ -25,6 +22,9 @@ services:
       RESULTS_DIR: # default: /src/reports
       IPADDRESS:
       STARTTIME:
+    env_file:
+      - path: .env.${COMPOSE_PROFILES} #.env.ssh .env.firefox or .env.chrome => If the COMPOSE_PROFILES is not set, only the manager will be launched.
+        required: false
     volumes:
       - ./manager/tests/agent:/src/manager/scenarios # default scenariodir
       - ./manager/tests/suites:/src/manager/scripts # default scriptdir
@@ -38,28 +38,29 @@ services:
         max-file: "10"
     container_name: manager
 
-  # firefox_agent:
-  #   build:
-  #     context: .
-  #     dockerfile: agent/seleniumlibrary-firefox/Dockerfile
-  #     # target: firefox
-  #   hostname: firefox_agent
-  #   security_opt:
-  #     - no-new-privileges:true
-  #   user: rfagent
-  #   networks:
-  #     - rfswarm
-  #   depends_on:
-  #     - manager
-  #   environment:
-  #     AGENTNAME: firefox
-  #     XMLMODE: # true, yes, 1, default: false
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "10"
-  #   container_name: firefox_agent
+  firefox_agent:
+    build:
+      context: .
+      dockerfile: agent/seleniumlibrary-firefox/Dockerfile
+      # target: firefox
+    hostname: firefox_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    environment:
+      AGENTNAME: firefox
+    profiles:
+      - firefox
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: firefox_agent
 
   chrome_agent:
     build:
@@ -76,7 +77,8 @@ services:
       - manager
     environment:
       AGENTNAME: chrome
-      XMLMODE: # true, yes, 1, default: false
+    profiles:
+      - chrome
     logging:
       driver: "json-file"
       options:
@@ -84,44 +86,49 @@ services:
         max-file: "10"
     container_name: chrome_agent
 
-  # ssh_agent:
-  #   build:
-  #     context: .
-  #     dockerfile: agent/sshlibrary/Dockerfile
-  #   hostname: ssh_agent
-  #   security_opt:
-  #     - no-new-privileges:true
-  #   user: rfagent
-  #   networks:
-  #     - rfswarm
-  #   depends_on:
-  #     - ssh_server
-  #     - manager
-  #   environment:
-  #     AGENTNAME: ssh
-  #     XMLMODE: # true, yes, 1, default: false
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "10"
-  #   container_name: ssh_agent
+  ssh_agent:
+    build:
+      context: .
+      dockerfile: agent/sshlibrary/Dockerfile
+    hostname: ssh_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - ssh_server
+      - manager
+    environment:
+      AGENTNAME: ssh
+      PROPERTY1: PROPERTY1
+      PROPERTY2: PROPERTY2
+    profiles:
+      - ssh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh_agent
 
-  # ssh_server:
-  #   build:
-  #     context: .
-  #     dockerfile: ssh-server/Dockerfile
-  #   hostname: ssh_server
-  #   security_opt:
-  #     - no-new-privileges:true
-  #   networks:
-  #     - rfswarm
-  #   logging:
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "10m"
-  #       max-file: "10"
-  #   container_name: ssh_server       
+  ssh_server:
+    build:
+      context: .
+      dockerfile: ssh-server/Dockerfile
+    hostname: ssh_server
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    profiles:
+      - ssh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh_server       
 
 networks:
   rfswarm:

@@ -6,13 +6,6 @@ build_and_run_python_cmd() {
     
     # Map environment variables to arguments
 
-    # convert XMLMODE to lower case
-    XMLMODE_LOWER=$(echo "$XMLMODE" | tr '[:upper:]' '[:lower:]')
-    if [ "$XMLMODE_LOWER" = "true" ] || [ "$XMLMODE_LOWER" = "yes" ] || [ "$XMLMODE_LOWER" = "1" ]; then
-        echo "fall back to pasing the output.xml after each iteration"
-        PYTHON_CMD="$PYTHON_CMD --xmlmode"
-    fi
-
     if [ -n "$MANAGER" ]; then
         PYTHON_CMD="$PYTHON_CMD --manager $MANAGER"
     fi
@@ -37,9 +30,13 @@ build_and_run_python_cmd() {
         PYTHON_CMD="$PYTHON_CMD --agentname $AGENTNAME"
     fi
 
-    if [ -n "$PROPERTY" ]; then
-        PYTHON_CMD="$PYTHON_CMD --property $PROPERTY"
-    fi
+    # Loop through all environment variables starting with PROPERTY
+    for var in $(compgen -e | grep '^PROPERTY[0-9]*$' | sort -V); do
+        value="${!var}"
+        if [ -n "$value" ]; then
+            PYTHON_CMD="$PYTHON_CMD --property $value"
+        fi
+    done
     
     # Add additional arguments passed as parameters
     PYTHON_CMD="$PYTHON_CMD $@"
