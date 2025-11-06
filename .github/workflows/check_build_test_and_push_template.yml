@@ -39,12 +39,16 @@ jobs:
         run: docker network create docker_network
       - name: Run rfswarm agent
         run: |
-          docker run --rm -d --name agent --hostname agent --network docker_network \
-          rfswarm-image-for-check
+          docker run --rm -d \
+            --name agent \
+            --hostname agent \
+            --network docker_network \
+            -e AGENTNAME=ssh \
+            rfswarm-image-for-check
       - name: Run ssh sever
         if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: |
-          docker run -d \
+          docker run --rm -d \
             --name ssh_server \
             --hostname ssh_server \
             --network docker_network \

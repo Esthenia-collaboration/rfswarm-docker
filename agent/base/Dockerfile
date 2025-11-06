@@ -8,7 +8,6 @@ ARG PIP_NO_CACHE_DIR=1
 # Default values
 ENV MANAGER=http://manager:8138 \
     LOG_LEVEL=2 \
-    XMLMODE=false \
     PROPERTY=container:docker
 
 # Install all the requirements using pip, add pip upgrade.
