@@ -36,11 +36,11 @@ services:
         max-file: "10"
     container_name: manager
 
-  firefox_agent:
+  firefox-agent:
     build:
       context: .
       dockerfile: agent/seleniumlibrary-firefox/Dockerfile
-    hostname: agent
+    hostname: firefox-agent
     security_opt:
       - no-new-privileges:true
     user: rfagent
@@ -48,21 +48,77 @@ services:
       - rfswarm
     depends_on:
       - manager
+    profiles:
+      - firefox
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "10"
-    container_name: agent
+    container_name: firefox-agent
 
-  ssh_server:
+  chrome-agent:
+    build:
+      context: .
+      dockerfile: agent/seleniumlibrary-chrome/Dockerfile
+    hostname: chrome-agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    profiles:
+      - chrome
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: chrome-agent
+
+  ssh-agent:
+    build:
+      context: .
+      dockerfile: agent/sshlibrary/Dockerfile
+    hostname: ssh-agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    profiles:
+      - ssh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh-agent
+
+  ssh-server:
     build:
       context: .
       dockerfile: ssh-server/Dockerfile
-    hostname: ssh_server
-    container_name: ssh_server
+    hostname: ssh-server
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
     networks:
-      - rfswarm         
+      - rfswarm
+    depends_on:
+      - ssh-agent
+    profiles:
+      - ssh
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh-server
 
 networks:
   rfswarm:
