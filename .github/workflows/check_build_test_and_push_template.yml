@@ -170,6 +170,8 @@ jobs:
         run: |
           docker build -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }} \
           -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):latest \
+          --build-arg DOCKER_REGISTRY="${{ inputs.REGISTRY_URL }}" \
+          --build-arg DOCKER_IMAGE="${{ inputs.DOCKER_IMAGE_PREFIX }}agent-base" \
           -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Push image on registry
         run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
