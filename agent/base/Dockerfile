@@ -5,7 +5,7 @@ FROM python:3.13.9-slim
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
 
-# Default values.
+# Default values
 ENV MANAGER=http://manager:8138 \
     LOG_LEVEL=2 \
     PROPERTY=container:docker

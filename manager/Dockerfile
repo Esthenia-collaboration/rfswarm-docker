@@ -2,7 +2,7 @@
 
 FROM python:3.13.9-slim
 
-# Default values.
+# Default values
 ENV PYTHONPATH="${PYTHONPATH}:/src/"
 
 RUN apt-get -y update \
