@@ -30,7 +30,7 @@ jobs:
         run: docker build -t rfswarm-image-for-check -f ${{ inputs.IMAGE }}/Dockerfile .
       - name: Build manager image
         run: |
-          docker build -t rfswarm-docker-manager -f manager/Dockerfile .
+          docker build -t rfswarm-docker-manager -f Dockerfile manager
       - name: Build ssh server image
         if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
         run: | 
