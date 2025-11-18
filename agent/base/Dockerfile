@@ -10,7 +10,7 @@ ENV MANAGER=http://manager:8138 \
     LOG_LEVEL=2 \
     PROPERTY=container:docker
 
-# Install all the requirements using pip, add pip upgrade.
+# Install all the requirements using pip, add pip upgrade
 RUN pip install --upgrade pip \
     && pip install rfswarm-agent \
         robotframework-requests \

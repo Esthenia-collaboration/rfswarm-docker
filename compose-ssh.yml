@@ -1,0 +1,45 @@
+# docker compose -f compose-ssh.yml up -d --build
+services:
+
+  ssh_agent:
+    build:
+      context: .
+      dockerfile: agent/sshlibrary/Dockerfile
+    hostname: ssh_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - ssh_server
+      - manager
+    environment:
+      AGENTNAME: ssh
+      PROPERTY1: PROPERTY1
+      PROPERTY2: PROPERTY2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh_agent
+
+  ssh_server:
+    build:
+      context: .
+      dockerfile: ssh-server/Dockerfile
+    hostname: ssh_server
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh_server
+
+include:
+  - manager/compose-manager.yml

@@ -1,0 +1,42 @@
+services:
+
+  manager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: manager
+    ports:
+      - "8138:8138" # you need to update container port as "8138:${PORT}". If PORT=8139 use 8138:8139
+      # - "8138:${PORT}" # uncomment if you use a .env file as .env.example
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    environment:
+      DISPLAY: $DISPLAY # mandatory to launch in GUI mode
+      PORT: # default: 8138
+      CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
+      LOG_LEVEL: 3 # 1-5, default: 0
+      DISPLAY_GUI: # true, yes, 1, default: false
+      RUN_AUTOMATICALLY: # true, yes, 1, default: false
+      AGENTS: # default: 1
+      RESULTS_DIR: # default: /src/reports
+      SCENARIO_FILE:
+      IPADDRESS:
+      STARTTIME:
+    volumes:
+      - ./tests/agent:/src/manager/scenarios # default scenariodir
+      - ./tests/suites:/src/manager/scripts # default scriptdir
+      - ./configuration:/src/manager/configuration
+      - ./reports:/src/reports # default resultsdir
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw # mandatory to launch in GUI mode
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: manager     
+
+networks:
+  rfswarm:
+    name: rfswarm
