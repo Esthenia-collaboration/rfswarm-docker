@@ -1,0 +1,28 @@
+# docker compose -f compose-chrome.yml up -d --build
+services:
+
+  chrome_agent:
+    build:
+      context: .
+      dockerfile: agent/seleniumlibrary-chrome/Dockerfile
+    hostname: agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    environment:
+      AGENTNAME: chrome
+      PROPERTY1: PROPERTY1
+      PROPERTY2: PROPERTY2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: chrome_agent
+
+include:
+  - manager/compose-manager.yml

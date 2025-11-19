@@ -1,12 +1,18 @@
+# syntax=docker/dockerfile:1
+
 FROM python:3.13.9-slim
 
-ENV PYTHONPATH="${PYTHONPATH}:/src/:/usr/rfagent/"
 ARG PIP_DISABLE_PIP_VERSION_CHECK=1
 ARG PIP_NO_CACHE_DIR=1
 
-#  Install all the requirements using pip, add pip upgrade.
-RUN pip install --upgrade pip
-RUN pip install rfswarm-agent \
+# Default values
+ENV MANAGER=http://manager:8138 \
+    LOG_LEVEL=2 \
+    PROPERTY=container:docker
+
+# Install all the requirements using pip, add pip upgrade
+RUN pip install --upgrade pip \
+    && pip install rfswarm-agent \
         robotframework-requests \
         robotframework-datadriver
 
@@ -16,9 +22,12 @@ RUN useradd -m rfagent
 # Switch to 'rfagent user'
 USER rfagent
 
-COPY --chown=rfagent --chmod=765 agent/base/entrypoint.sh /usr/rfagent/entrypoint.sh
+# Copy the Python command builder script
+COPY --chown=rfagent --chmod=765 agent/base/build-python-cmd.sh /usr/local/bin/build-python-cmd.sh
+COPY --chown=rfagent --chmod=765 agent/base/entrypoint.sh /usr/local/bin/base-entrypoint.sh
 
-WORKDIR  /usr/rfagent
+WORKDIR /usr/rfagent
 
 # Run the agent
-ENTRYPOINT ["/usr/rfagent/entrypoint.sh"]
+ENTRYPOINT ["base-entrypoint.sh"]
+CMD []

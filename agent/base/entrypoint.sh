@@ -1,6 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
-DEFAULT_ARGS="-m http://manager:8138 -g 2 -p container:docker"
-echo "Running rfswarm-agent..."
-# Use the default args and overwrite them with user arguments
-rfswarm-agent $DEFAULT_ARGS "$@"
+set -e
+
+echo "=== Base Image - Starting ==="
+
+# Execute initialization hooks if present (for child images)
+if [ -d "/docker-entrypoint-init.d" ]; then
+    for script in /docker-entrypoint-init.d/*.sh; do
+        if [ -f "$script" ]; then
+            echo "Executing hook: $(basename $script)"
+            source "$script"
+        fi
+    done
+fi
+
+# Launch the Python command
+exec build-python-cmd.sh "$@"

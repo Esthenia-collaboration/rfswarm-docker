@@ -47,7 +47,7 @@ fi
 
 echo 'Manager Started'
 COMMAND="python rfswarm.py --ini $CONFIG_FILE --debug $LOG_LEVEL --agents $AGENTS $ARGS"
-echo "Run commande ==> $COMMAND"
+echo "Run command ==> $COMMAND"
 exec $COMMAND
 echo 'Manager down correctly'
  
