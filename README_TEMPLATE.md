@@ -1,105 +1,199 @@
-# RFSWARM-DOCKER
-## Why? [![why rfswarm](https://img.shields.io/badge/start%20with-why%3F-brightgreen.svg?style=flat)]
 
-> In quality assurance field, it's appears like an evidence that performance tests are critical to increase confidance about software resilience, sclability or to identify likely bottleneck for instance.
-> Despite those evidence, performances tests are not systematically implemented in software developpement cycle, on the contrary most of the time they aren't even present in test heritage. Why that?
-> One of the reason might be that performance tests are a specific test type which require a specific vocabulary, kwoledge and environnement dependecy. In addition, most performance test softwares require time to get into, and to become confortable with the software.
-> Finally ,performance testing requires graphical representation of the relevant metrics measured during testing, to facilitate result's interpretation. 
-> To help democratize performance testing for a wide range of projcts in need, "rfswarm-docker" have been created.
+# RFSWARM-DOCKER  
+![Docker Pulls](https://img.shields.io/docker/pulls/estheniacollaboration/rfswarm-agent-base?style=flat)  
+![GitHub Repo Stars](https://img.shields.io/github/stars/Esthenia-collaboration/rfswarm-docker?style=flat)  
+![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)  
+![License](https://img.shields.io/github/license/Esthenia-collaboration/rfswarm-docker?style=flat)  
 
-## What is RFSWARM
-Rfswarm is a performance test tool creates by damies13 [rfswarm](https://github.com/damies13/rfswarm/tree/master/Doc) to make it easy the reuse of integration or functionals tests written with robot framework.
-Which help to optimize test effort, minimize test heritage maintenance and improve quality assurance efficiency.
+---
 
-## rfswarm-docker then?
-rfswarm-docker have been created to make rfswarm performance test tool available in a containarize version.
-Making the tool available in a Docker container, facilitating the automation of performance tests by integrating them into a CI/CD environment.
-Applying performance test on Application under test (ATU) has never been easier.
-Just run manager agent image, your neeedd agent image which will run the nomber of user desired on your choosen server.
- 
-[![1.4.0](https://badge.fury.io/js/cropperjs.svg)](https://badge.fury.io/js/cropperjs)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Esthenia-collaboration/rfswarm-docker/issues)
-![Docker Pulls][docker-pull-url]
+## 1. 🚀 Why?  
 
-## Installation
+Performance testing is essential for evaluating software scalability, resilience, and detecting bottlenecks.  
+However, performance testing is often excluded from test strategies due to:  
+- Complex environments  
+- Required technical skills  
+- Specialized tools  
+- Difficulty interpreting metrics  
 
-OS X & Linux:
+**rfswarm-docker** was created to address these blockers by offering a reproducible, Docker-based environment to execute distributed Robot Framework performance tests.
 
-```sh
-npm install my-crazy-module --save
-```
+---
 
-Windows:
+## 2. 🧰 What is RFSWARM?  
 
-```sh
-edit autoexec.bat
-```
+[Rfswarm](https://github.com/damies13/rfswarm) is an open-source performance testing tool built on **Robot Framework**.  
+Its purpose is to **reuse existing Robot Framework test suites** and execute them in parallel as distributed virtual users.
 
-## Agent Images available
+### Key Features  
+- Full reuse of Robot Framework test suites (no duplication)  
+- Manager/Agent architecture optimized for load testing  
+- Horizontal scalability via multiple Agents  
+- Optional reporter for visualization  
+- Python-based and extensible  
 
-| Image Name | Status | Description |
-| ---- | ---- | ---- |
-| estheniacollaboration/rfswarm-agent-base | Available | Debian base with Python 3.x, Rfswarm Agent, robot framework, RequestsLibrary, DataDriver Library |
-| estheniacollaboration/rfswarm-agent-sshlibrary | Available | Base + sshlibrary |
-| estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome | Available | Base + seleniumlibrary + Chrome |
-| estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox | Planned | Base + seleniumlibrary + FireFox |
+### Components  
+
+#### 🔹 Manager  
+Coordinates the performance test, assigns virtual users (robots), and synchronizes execution.
+
+#### 🔹 Agent  
+Executes Robot Framework test cases.  
+You can run one or hundreds of Agents across machines or containers.
+
+#### 🔹 Reporter (optional)  
+Aggregates and visualizes performance metrics.
+
+By transforming functional tests into load-generating scenarios, rfswarm significantly reduces the effort needed to build performance tests.
+
+---
+
+## 3. 🐳 What is rfswarm-docker?  
+
+**rfswarm-docker** provides Docker images for the rfswarm Manager and Agents, enabling:  
+- Quick deployment  
+- Easy scaling  
+- Consistent execution environments  
+- CI/CD integration for performance pipelines  
+
+This repository includes several specialized Agent images and a Manager image.
+
+---
+
+## 4. ⚡ Quick Start  
+
+### Step 1 — Pull an Agent image  
 
 
-## Manager Images
-| Image Name | Status | Description |
-| ---- | ---- | ---- |
-| estheniacollaboration/rfswarm-manager-base | Planned | Debian base with Python 3.x, Rfswarm Manager |
+```bash
+docker pull estheniacollaboration/rfswarm-agent-base:latest
 
-## Usage example
 
-A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.
+### Step 2 Pull the Base Agent
 
-_For more examples and usage, please refer to the [Wiki][wiki]._
+```bash
+docker pull ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 
-## Development setup
+##  Run an Agent
 
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
+To run an rfswarm Agent, use one of the prebuilt Agent Docker images. For example:
 
-```sh
-make install
-npm test
-```
+```bash
+docker run -d --name rfswarm-agent \
+  -p 8081:8081 \
+  -v $(pwd)/tests:/src/agent/tests \
+  estheniacollaboration/rfswarm-agent-base:latest
 
-## Release History
+ ## Notes
 
-* 0.2.1
-    * CHANGE: Update docs (module code remains unchanged)
-* 0.2.0
-    * CHANGE: Remove `setDefaultXYZ()`
-    * ADD: Add `init()`
-* 0.1.1
-    * FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
-* 0.1.0
-    * The first proper release
-    * CHANGE: Rename `foo()` to `bar()`
-* 0.0.1
-    * Work in progress
+- Replace `8081` with your preferred port if needed.
+- Mount your test suites into the container (`-v $(pwd)/tests:/src/agent/tests`) so the Agent can access them.
+- You can run multiple Agents by giving each container a unique name and port.
 
-## Meta
 
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
+### Step 3 — Run the Manager
 
-Distributed under the XYZ license. See ``LICENSE`` for more information.
+1. **Clone the repository:**
 
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+```bash
+git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
+cd rfswarm-docker/manager
+docker build -t local/rfswarm-manager-base:latest .
+docker images
 
-## Contributing
+- You should see local/rfswarm-manager-base in the list of images.
 
-1. Fork it (<https://github.com/yourname/yourproject/fork>)
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
+- The Manager container can be started using the settings defined in `compose-manager.yml`.  
+A minimal `docker run` equivalent is:
 
-<!-- Markdown link & img dfn's -->
-[docker-pull-url]: https://img.shields.io/docker/pulls/:esthenia-collaboration/:rfswarm-docker
-[npm-url]: https://npmjs.org/package/datadog-metrics
-[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wikista
+```bash
+docker run -d --name manager \
+  -p 8138:8138 \
+  -e DISPLAY=$DISPLAY \
+  -v $(pwd)/tests/agent:/src/manager/scenarios \
+  -v $(pwd)/tests/suites:/src/manager/scripts \
+  -v $(pwd)/configuration:/src/manager/configuration \
+  -v $(pwd)/reports:/src/reports \
+  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
+  estheniacollaboration/rfswarm-manager-base:latest
+
+  ## Run the Manager with `compose-manager.yml`
+
+You can start the Manager container using Docker Compose to simplify environment setup.
+
+### Steps
+
+1. **Clone the repository:**
+
+```bash
+git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
+  
+
+2. **Navigate to the Manager directory:**
+
+```bash
+cd rfswarm-docker/manager
+
+3. **Start the Manager with Docker Compose:**
+
+```bash
+docker-compose -f compose-manager.yml up -d
+
+4. **Verify the container is running:**
+```bash
+docker ps
+
+- The Manager should now be accessible on port 8138 (or the port you defined in the .env file or compose-manager.yml).
+
+  ## Environment Variables
+
+- `DISPLAY`: mandatory for GUI mode  
+- `PORT`: manager port, default 8138  
+- `CONFIG_FILE`: path to manager configuration file  
+- `LOG_LEVEL`: verbosity level (1-5)  
+- `DISPLAY_GUI`: enable GUI display (true/false)  
+- `RUN_AUTOMATICALLY`: start scenario automatically  
+- `AGENTS`: number of agents to use  
+- `RESULTS_DIR`: directory for storing results  
+- `SCENARIO_FILE`: optional scenario configuration file  
+- `IPADDRESS`: optional, Manager IP address  
+- `STARTTIME`: optional, scheduled start time for scenario  
+
+
+## Notes
+
+- Ensure the Manager container is on the same `rfswarm` network as your Agents if using multiple containers.  
+- The GUI requires X11 forwarding (`/tmp/.X11-unix` volume).  
+
+
+### 5. 📊 Metrics & Reporting
+
+- **Metrics collected:** response time, success/failure rates, throughput  
+- **Results storage:** results are stored in the `/reports` volume by default  
+- **Export options:** results can be exported to CSV or HTML  
+- **Optional integration:** metrics can be visualized using Grafana dashboards
+
+
+## 📦 Available Agent Images
+
+| Image Name                                                   | Status    | Description                                                                                   |
+|--------------------------------------------------------------|-----------|-----------------------------------------------------------------------------------------------|
+| **estheniacollaboration/rfswarm-agent-base**                 | ✅ Available | Debian + Python 3.x + rfswarm Agent + Robot Framework + RequestsLibrary + DataDriver          |
+| **estheniacollaboration/rfswarm-agent-sshlibrary**           | ✅ Available | Base image + SSHLibrary                                                                       |
+| **estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome** | 🕒 In progress | Base image + SeleniumLibrary + Chrome browser                                                 |
+| **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | Base image + SeleniumLibrary + Firefox browser                                                |
+
+
+## 🔗 Useful Links
+
+- **Rfswarm (original project)**  
+  https://github.com/damies13/rfswarm
+
+- **Rfswarm Documentation**  
+  https://github.com/damies13/rfswarm/blob/master/Doc/README.md
+
+- **Robot Framework**  
+  https://robotframework.org/
+
+- **rfswarm-docker Issues**  
+  https://github.com/Esthenia-collaboration/rfswarm-docker/issues
