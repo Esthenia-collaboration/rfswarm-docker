@@ -183,6 +183,37 @@ docker ps
 - **Export options:** results can be exported to CSV or HTML  
 - **Optional integration:** metrics can be visualized using Grafana dashboards
 
+## 6. Prerequisites
+
+- Minimum required versions: Docker, Docker Compose, Python, Robot Framework  
+- Supported OS: Linux, macOS, Windows WSL2  
+- Permissions required for X11 if GUI mode is used  
+
+## 7. Quick Test Example
+
+- Provide a minimal Robot Framework scenario to run with an Agent  
+- Example of executing a simple performance test with metric capture  
+
+## 8. Configuration Examples
+
+- Examples of `manager.yml` or `scenario.yml` files  
+- Typical settings for `AGENTS`, `LOG_LEVEL`, `DISPLAY_GUI`  
+- How to schedule a test using `STARTTIME`  
+
+## 9. Docker Networking
+
+- How to configure multiple Agents and the Manager on the same network (`rfswarm`)  
+- Example:
+
+```bash
+docker network create rfswarm
+```
+
+## 10. Scaling and Parallel Execution
+
+- Explain how to add multiple Agents to simulate more virtual users
+- Example configuration for 10, 50, or 100 Agents 
+
 
 ## 📦 Available Agent Images
 
@@ -192,6 +223,7 @@ docker ps
 | **estheniacollaboration/rfswarm-agent-sshlibrary**           | ✅ Available | Base image + SSHLibrary                                                                       |
 | **estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome** | 🕒 In progress | Base image + SeleniumLibrary + Chrome browser                                                 |
 | **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | Base image + SeleniumLibrary + Firefox browser                                                |
+
 
 
 ## 🔗 Useful Links
