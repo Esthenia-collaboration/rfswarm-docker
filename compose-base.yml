@@ -1,0 +1,27 @@
+# docker compose -f compose-agent.yml up -d --build
+services:
+
+  base_agent:
+    build:
+      context: .
+      dockerfile: agent/base/Dockerfile
+    hostname: base_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    environment:
+      AGENTNAME: base
+      PROPERTY1: faker
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: base_agent
+
+include:
+  - manager/compose-manager.yml

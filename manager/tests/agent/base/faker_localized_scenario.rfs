@@ -1,0 +1,44 @@
+[Scenario]
+uploadmode = err
+scriptcount = 5
+graphlist =
+
+[1]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Import With Locale
+script = /src/manager/scripts/faker_localized.robot
+
+[2]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Import With Explicit Locale
+script = /src/manager/scripts/faker_localized.robot
+
+[3]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Import With Explicit Seed
+script = /src/manager/scripts/faker_localized.robot
+
+[4]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Import With Explicit Locale And Seed
+script = /src/manager/scripts/faker_localized.robot
+
+[5]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Import With Explicit Locale And Seed And No Providers
+script = /src/manager/scripts/faker_localized.robot
