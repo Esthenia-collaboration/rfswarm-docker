@@ -68,11 +68,14 @@ This repository includes several specialized Agent images and a Manager image.
 ```bash
 docker pull estheniacollaboration/rfswarm-agent-base:latest
 
+```
 
 ### Step 2 Pull the Base Agent
 
 ```bash
 docker pull ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
+
+```
 
 ##  Run an Agent
 
@@ -83,6 +86,8 @@ docker run -d --name rfswarm-agent \
   -p 8081:8081 \
   -v $(pwd)/tests:/src/agent/tests \
   estheniacollaboration/rfswarm-agent-base:latest
+
+  ```
 
  ## Notes
 
@@ -117,6 +122,7 @@ docker run -d --name manager \
   -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
   estheniacollaboration/rfswarm-manager-base:latest
 
+```
   ## Run the Manager with `compose-manager.yml`
 
 You can start the Manager container using Docker Compose to simplify environment setup.
@@ -128,20 +134,23 @@ You can start the Manager container using Docker Compose to simplify environment
 ```bash
 git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
   
-
+```
 2. **Navigate to the Manager directory:**
 
 ```bash
 cd rfswarm-docker/manager
+```
 
 3. **Start the Manager with Docker Compose:**
 
 ```bash
 docker-compose -f compose-manager.yml up -d
+```
 
 4. **Verify the container is running:**
 ```bash
 docker ps
+```
 
 - The Manager should now be accessible on port 8138 (or the port you defined in the .env file or compose-manager.yml).
 
