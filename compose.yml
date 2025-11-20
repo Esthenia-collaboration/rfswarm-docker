@@ -4,8 +4,8 @@ services:
   agent:
     build:
       context: .
-      dockerfile: agent/${AGENTNAME:-base}/Dockerfile
-    hostname: ${AGENTNAME:-base}_agent
+      dockerfile: agent/${AGENT_FOLDER:-base}/Dockerfile
+    hostname: ${AGENT_FOLDER:-base}_agent
     security_opt:
       - no-new-privileges:true
     user: rfagent
@@ -14,7 +14,7 @@ services:
     depends_on:
       - manager
     environment:
-      AGENTNAME: ${AGENTNAME:-base}
+      AGENTNAME: ${AGENT_FOLDER:-base}
       PROPERTY1: PROPERTY1
       PROPERTY2: PROPERTY2
     logging:
