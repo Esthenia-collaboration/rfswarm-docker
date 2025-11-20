@@ -110,6 +110,7 @@ docker images
 - You should see local/rfswarm-manager-base in the list of images.
 
 - The Manager container can be started using the settings defined in `compose-manager.yml`.  
+- In this case providing a scenario file while running the manager image is mandatory.
 A minimal `docker run` equivalent is:
 
 ```bash
@@ -176,7 +177,7 @@ docker ps
 - The GUI requires X11 forwarding (`/tmp/.X11-unix` volume).  
 
 
-### 5. 📊 Metrics & Reporting
+## 5. 📊 Metrics & Reporting
 
 - **Metrics collected:** response time, success/failure rates, throughput  
 - **Results storage:** results are stored in the `/reports` volume by default  
