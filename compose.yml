@@ -1,0 +1,46 @@
+# "docker compose up -d --build" or "docker compose --profile sshlibrary up -d --build" for ssh agent
+services:
+
+  agent:
+    build:
+      context: .
+      dockerfile: agent/${AGENTNAME:-base}/Dockerfile
+    hostname: ${AGENTNAME:-base}_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    environment:
+      AGENTNAME: ${AGENTNAME:-base}
+      PROPERTY1: PROPERTY1
+      PROPERTY2: PROPERTY2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: agent
+
+  ssh_server:
+    profiles:
+      - sshlibrary
+    build:
+      context: .
+      dockerfile: ssh-server/Dockerfile
+    hostname: ssh_server
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: ssh_server
+
+include:
+  - manager/compose-manager.yml
