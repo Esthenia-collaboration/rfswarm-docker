@@ -1,4 +1,4 @@
-name: Standard any branch CI workflow
+name: Main branch tag CI workflow
 
 on:
   push:
@@ -7,14 +7,64 @@ on:
     tags:
       - '*'
 
+env:
+  BASE_IMAGE: "agent/base"
+  OTHER_IMAGES: "agent/seleniumlibrary-chrome agent/sshlibrary agent/seleniumlibrary-firefox"
+
 jobs:
-  check_build_push:
-    if: github.ref_type == 'tag'
-    uses: ./.github/workflows/check_build_push_template.yml
+  check_changes:
+    uses: ./.github/workflows/check_changes_template.yml
     with:
+      PROJECT_IMAGES: "agent/base agent/seleniumlibrary-chrome agent/sshlibrary agent/seleniumlibrary-firefox"
+  # Build and push base image if changes detected
+  build_base_image:
+    needs: check_changes
+    if: ${{ contains(needs.check_changes.outputs.IMAGES_TO_BUILD, 'agent/base') }}
+    uses: ./.github/workflows/check_build_test_and_push_template.yml
+    with:
+      IMAGE: "agent/base"
       REGISTRY_URL: docker.io
       DOCKER_IMAGE_PREFIX: /estheniacollaboration/rfswarm-
       DOCKER_IMAGE_TAG: ${{ github.ref_name }}
     secrets:
       REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+  update_images_to_build:
+    needs: check_changes
+    runs-on: ubuntu-latest
+    outputs:
+      IMAGES_TO_BUILD: ${{ steps.override_images.outputs.IMAGES_TO_BUILD }}
+    steps:
+      - name: Reset IMAGES_TO_BUILD with OTHER_IMAGES value
+        id: override_images
+        run: |
+          OTHER_IMAGES_JSON=$(echo "${{ env.OTHER_IMAGES }}" | jq -c -R 'split(" ")');
+          if ${{ contains(needs.check_changes.outputs.IMAGES_TO_BUILD, 'agent/base') }}; then
+            echo "IMAGES_TO_BUILD=$OTHER_IMAGES_JSON" >> "$GITHUB_OUTPUT"
+          else
+            echo 'IMAGES_TO_BUILD=${{ needs.check_changes.outputs.IMAGES_TO_BUILD }}' >> "$GITHUB_OUTPUT"
+          fi
+  # Build and push other images
+  build_other_images:
+    needs: [check_changes, build_base_image, update_images_to_build]
+    if: |
+      always()
+      && (needs.build_base_image.result == 'success'
+      || needs.build_base_image.result == 'skipped')
+      && needs.check_changes.outputs.IMAGES_TO_BUILD
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJson(needs.update_images_to_build.outputs.IMAGES_TO_BUILD) }}
+    # uses: Esthenia-collaboration/rfswarm-docker/.github/workflows/check_build_test_and_push_template.yml@main
+    uses: ./.github/workflows/check_build_test_and_push_template.yml
+    with:
+      IMAGE: ${{ matrix.image }}
+      REGISTRY_URL: docker.io
+      DOCKER_IMAGE_PREFIX: /estheniacollaboration/rfswarm-
+      DOCKER_IMAGE_TAG: ${{ github.ref_name }}
+    secrets:
+      REGISTRY_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      REGISTRY_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+
+

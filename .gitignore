@@ -5,3 +5,9 @@
 
 # does not ignore the README.md file
 !README.md
+
+reports/
+results/
+db/
+clean_reports.sh
+compose_db_test.yml

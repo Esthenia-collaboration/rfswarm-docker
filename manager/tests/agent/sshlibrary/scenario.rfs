@@ -1,0 +1,13 @@
+[Scenario]
+uploadmode = err
+scriptcount = 1
+graphlist =
+
+[1]
+robots = 1
+delay = 0
+rampup = 10
+run = 30
+test = Passing ssh connection
+script = /src/manager/scripts/sshlibrary_test.robot
+filters = [{'rule': 'Require', 'optn': 'Agent: ssh'}]

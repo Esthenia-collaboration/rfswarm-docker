@@ -1,0 +1,28 @@
+# docker compose -f compose-firefox.yml up -d --build
+services:
+
+  firefox_agent:
+    build:
+      context: .
+      dockerfile: agent/seleniumlibrary-firefox/Dockerfile
+    hostname: firefox_agent
+    security_opt:
+      - no-new-privileges:true
+    user: rfagent
+    networks:
+      - rfswarm
+    depends_on:
+      - manager
+    environment:
+      AGENTNAME: firefox
+      PROPERTY1: PROPERTY1
+      PROPERTY2: PROPERTY2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: firefox_agent
+
+include:
+  - manager/compose-manager.yml

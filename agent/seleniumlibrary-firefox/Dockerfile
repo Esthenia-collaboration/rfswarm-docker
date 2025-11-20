@@ -1,25 +1,35 @@
-FROM  estheniacollaboration/rfswarm-agent-base:latest
-ENV   DISPLAY=:0
-ENV   SCREEN_WIDTH 1280
-ENV   SCREEN_HEIGHT 720
-ENV   SCREEN_DEPTH 16
-ENV   PYTHONPATH="${PYTHONPATH}:/src/"
+# syntax=docker/dockerfile:1
 
-#  I deleted pip upgrade command in Dockerfile because it seems to cause some issues
+ARG DOCKER_REGISTRY="ghcr.io"
+ARG DOCKER_IMAGE="/esthenia-collaboration/rfswarm-agent-base"
+ARG DOCKER_IMAGE_VERSION="latest"
+FROM ${DOCKER_REGISTRY}${DOCKER_IMAGE}:${DOCKER_IMAGE_VERSION}
+
+ENV DISPLAY=:0 \
+    SCREEN_WIDTH=1280 \
+    SCREEN_HEIGHT=720 \
+    SCREEN_DEPTH=16
+
 #  Install xvfb interface's dependencies
-RUN apt-get update -y \ 
-  && apt-get install --no-install-recommends -y xvfb libgl1-mesa-dri mesa-utils libosmesa6 libglapi-mesa \
-  && rm -rf /var/lib/apt/lists/*
-#  Install robot framework selenium library using pip
-RUN   pip install robotframework-seleniumlibrary      
-#  Install firefox dependencies 
-RUN   apt-get -y update && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 libdbus-glib-1-dev bzip2 jq 
+# Switch user root
+USER root
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y vim xvfb xrdp libgl1-mesa-dri mesa-utils dbus-x11 libosmesa6 libglapi-mesa xz-utils \
+    && rm -rf /var/lib/apt/lists/*
 
+#  Install robot framework selenium library using pip
+RUN pip install --upgrade pip \
+    && pip install robotframework-seleniumlibrary
+
+#  Install firefox dependencies
+RUN apt-get update \
+    && apt-get install -y wget curl dpkg libfreetype6 libfontconfig1 libxrender1 libasound-dev libdbus-glib-1-dev libgtk-3-dev libxt6 bzip2 jq
 
 #  Install firefox as browser. The last firefox stable version will be installed.
 #=========
 # Firefox
 #=========
+ARG TMPDIR=/tmp
 ARG FIREFOX_VERSION=latest
 RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
         FIREFOX_DOWNLOAD_URL=$(if [ $FIREFOX_VERSION = "latest" ] || [ $FIREFOX_VERSION = "beta-latest" ] || [ $FIREFOX_VERSION = "nightly-latest" ] || [ $FIREFOX_VERSION = "devedition-latest" ] || [ $FIREFOX_VERSION = "esr-latest" ]; then echo "https://download.mozilla.org/?product=firefox-$FIREFOX_VERSION-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"; fi) ; \
@@ -28,10 +38,11 @@ RUN if [ "$(dpkg --print-architecture)" = "amd64" ]; then \
     fi \
     && apt-get update -qqy \
     && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-    && wget --no-verbose -O /tmp/firefox.tar.bz2 $FIREFOX_DOWNLOAD_URL \
+    && wget --no-verbose -O /tmp/firefox.tar.xz $FIREFOX_DOWNLOAD_URL \
     && rm -rf /opt/firefox \
-    && tar -xjf /tmp/firefox.tar.bz2 \
-    && rm /tmp/firefox.tar.bz2 \
+    && tar xf $TMPDIR/firefox.tar.xz \
+    && ls $TMPDIR/* \
+    && rm $TMPDIR/firefox.tar.xz \
     && mv firefox /opt/firefox-$FIREFOX_VERSION \
     && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox
 
@@ -52,18 +63,23 @@ RUN LATEST_VERSION=$(curl -sk https://api.github.com/repos/mozilla/geckodriver/r
   && chmod 755 /opt/geckodriver-$GK_VERSION \
   && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
 
-# We will use this versionning below to display firefox version in the package information  
+# Create hooks directory with ROOT user
+RUN mkdir -p /docker-entrypoint-init.d
+
+# Switch to custom rfagent user previously created in rfswarm agent base image
+USER rfagent
+
+# We will use this versionning below to display firefox version in the package information
 #============================================
-# Dumping Browser information 
+# Dumping Browser information
 #============================================
-RUN echo "firefox" 
+RUN echo "firefox"
 RUN firefox --version
 
 #==============================================================
-# Run entrypoint.sh to set virtual display
+# Run entrypoint_firefox.sh to set virtual display
 #==============================================================
-COPY  agent/seleniumlibrary-firefox/entrypoint.sh /opt/bin/entrypoint.sh
-RUN   chmod +x /opt/bin/entrypoint.sh
-ENTRYPOINT [ "/opt/bin/entrypoint.sh" ]
+# Add initialization hook
+COPY --chown=rfagent --chmod=765 agent/seleniumlibrary-firefox/entrypoint.sh /docker-entrypoint-init.d/01-firefox.init.sh
 
-   
+WORKDIR  /usr/rfagent

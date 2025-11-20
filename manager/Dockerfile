@@ -1,11 +1,20 @@
-FROM    python:3.11.4-slim-buster
+# syntax=docker/dockerfile:1
 
-ENV     PYTHONPATH="${PYTHONPATH}:/src/"
+FROM python:3.13.9-slim
 
-RUN     apt-get -y update && apt-get install -y xvfb tk-dev
-RUN     pip install --upgrade pip && pip install --no-cache-dir --user tk configparser psutil rfswarm-manager
+# Default values
+ENV PYTHONPATH="${PYTHONPATH}:/src/"
 
-COPY  manager/entrypoint.sh /opt/bin/entrypoint.sh
-RUN   chmod +x /opt/bin/entrypoint.sh
+RUN apt-get -y update \
+    && apt-get install -y xvfb tk-dev \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir --user tk configparser psutil rfswarm-manager
+
+COPY entrypoint.sh /opt/bin/entrypoint.sh
+COPY configuration/manager.ini /src/manager/configuration/manager.ini
+RUN chmod +x /opt/bin/entrypoint.sh
+
+WORKDIR /root/.local/lib/python3.13/site-packages/rfswarm_manager/
 
 ENTRYPOINT ["/opt/bin/entrypoint.sh"]

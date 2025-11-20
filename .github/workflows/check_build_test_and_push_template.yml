@@ -1,0 +1,181 @@
+name: build-push-and-test-template
+
+on:
+  workflow_call:
+    inputs:
+      IMAGE:
+        type: string
+        required: true
+      DOCKER_IMAGE_TAG:
+        type: string
+        default: ${{ github.ref_name }}
+      REGISTRY_URL:
+        type: string
+      DOCKER_IMAGE_PREFIX:
+        type: string
+    secrets:
+      REGISTRY_USERNAME:
+        required: true
+      REGISTRY_PASSWORD:
+        required: true
+
+jobs:
+  check_docker_build:
+    name: "Check image: ${{ inputs.IMAGE }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check that the agent image builds
+        run: docker build -t rfswarm-image-for-check -f ${{ inputs.IMAGE }}/Dockerfile .
+      - name: Build manager image
+        run: |
+          docker build -t rfswarm-docker-manager -f manager/Dockerfile manager
+      - name: Build ssh server image
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
+        run: | 
+          docker build -t ssh_server -f ssh-server/Dockerfile . 
+      - name: Create network
+        run: docker network create docker_network
+      - name: Run rfswarm agent
+        run: |
+          docker run --rm -d \
+            --name agent \
+            --hostname agent \
+            --network docker_network \
+            -e AGENTNAME=ssh \
+            rfswarm-image-for-check
+      - name: Run ssh sever
+        if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}
+        run: |
+          docker run --rm -d \
+            --name ssh_server \
+            --hostname ssh_server \
+            --network docker_network \
+            ssh_server 
+      - name: Run rfswarm manager or pass
+        id: manager
+        run: |
+          if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
+            echo "Scenario file does not exist, nothing to run."
+          else
+            DIR_NAME="results_${{ github.run_id }}"
+            echo "dir_name=$DIR_NAME" >> $GITHUB_OUTPUT
+            echo "dir_name=$DIR_NAME"
+            SCENARIO_NAME="scenario_${{ github.run_id }}"
+            echo "scenario_name=$SCENARIO_NAME" >> $GITHUB_OUTPUT
+            echo "scenario_name=$SCENARIO_NAME"
+            docker run --rm --name manager --hostname manager --network docker_network \
+            -p 8138:8138 \
+            -e SCENARIO_FILE="/src/manager/scenarios/$SCENARIO_NAME.rfs" \
+            -e LOG_LEVEL=3 \
+            --mount type=bind,source=$(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs,target=/src/manager/scenarios/$SCENARIO_NAME.rfs \
+            -v $(pwd)/manager/tests/suites:/src/manager/scripts -v ${{ github.workspace }}/$DIR_NAME:/src/reports \
+            rfswarm-docker-manager
+          fi
+        shell: bash
+      - name: Check tests result status
+        id: check_status
+        run: |
+          if ! [ -f $(pwd)/manager/tests/${{ inputs.IMAGE }}/scenario.rfs ]; then
+            echo "Scenario file does not exist, nothing to run."
+          else
+            # DIR_NAME="${{ steps.run_scenario.outputs.dir_name }}"
+            # SCENARIO_NAME="${{ steps.run_scenario.outputs.scenario_name }}"
+
+            DIR_NAME="results_${{ github.run_id }}"
+            SCENARIO_NAME="scenario_${{ github.run_id }}"
+
+            # Find the subdirectory containing SCENARIO_NAME
+            SCENARIO_DIR=$(find "${{ github.workspace }}/$DIR_NAME" -type d -name "*$SCENARIO_NAME*" | head -n 1)
+            
+            if [ -z "$SCENARIO_DIR" ]; then
+              echo "::error::❌ Scenario directory not found"
+              exit 1
+            fi
+            
+            # Extract the directory name (without path)
+            SCENARIO_DIR_NAME=$(basename "$SCENARIO_DIR")
+            
+            # Build the exact path to the database file
+            DB_FILE="$SCENARIO_DIR/$SCENARIO_DIR_NAME.db"
+            
+            if [ ! -f "$DB_FILE" ]; then
+              echo "::error::❌ Database file not found: $DB_FILE"
+              exit 1
+            fi
+            
+            echo "::notice::✅ Database found: $DB_FILE"
+            QUERY=$(cat << 'EOF'
+            SELECT
+              script_index,
+              robot,
+              iteration,
+              result,
+              md.SecondaryMetric,
+              md.MetricValue
+            FROM Results r
+            LEFT JOIN MetricData md on r.script_index = md.PrimaryMetric and md.MetricType = 'Scenario_Test'
+            WHERE result = 'FAIL'
+            group by script_index, robot, iteration, result;
+          EOF
+          )
+            RESULT=$(sqlite3 "$DB_FILE" "$QUERY")
+            echo "failure results:"
+            echo "$RESULT"
+
+            if [ -n "$RESULT" ]; then
+              echo "::error::❌ Scenario contains FAIL rows"
+              sqlite3 -header -csv "$DB_FILE" "$QUERY" > "${{ github.workspace }}/failures_status.csv"
+              exit 1
+            fi
+          fi
+        shell: bash
+      - name: Prepare artifact name
+        id: prep
+        if: always()
+        run: echo "image_name_safe=$(echo "${{ inputs.IMAGE }}" | tr '/' '_')" >> $GITHUB_OUTPUT
+      - name: Upload tests results
+        uses: actions/upload-artifact@v4
+        if: failure() && steps.check_status.outcome == 'failure'
+        with:
+          name: failures_status-${{ steps.prep.outputs.image_name_safe }}-${{ inputs.DOCKER_IMAGE_TAG }}
+          path: ${{ github.workspace }}/failures_status.csv
+          retention-days: 2
+      - name: Archive reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ${{ steps.prep.outputs.image_name_safe }}-${{ inputs.DOCKER_IMAGE_TAG }}
+          path: ${{ github.workspace }}/results_${{ github.run_id }}
+          retention-days: 2
+      - name: Clean docker space
+        run: |
+          docker stop ssh_server || true
+          docker stop agent;
+          docker network rm docker_network
+  push_to_registry:
+    name: Push rfswarm ${{ inputs.IMAGE }} image to registry
+    needs:
+      - check_docker_build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to Registry with secret variables
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.REGISTRY_URL }}
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+      - name: Build the rfswarm agent docker base image
+        run: |
+          docker build -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):${{ inputs.DOCKER_IMAGE_TAG }} \
+          -t "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g"):latest \
+          --build-arg DOCKER_REGISTRY="${{ inputs.REGISTRY_URL }}" \
+          --build-arg DOCKER_IMAGE="${{ inputs.DOCKER_IMAGE_PREFIX }}agent-base" \
+          -f ${{ inputs.IMAGE }}/Dockerfile .
+      - name: Push image on registry
+        run: docker push "${{ inputs.REGISTRY_URL }}${{ inputs.DOCKER_IMAGE_PREFIX }}"$(echo ${{ inputs.IMAGE }} |  sed "s/\//-/g") --all-tags
