@@ -22,7 +22,7 @@ services:
       options:
         max-size: "10m"
         max-file: "10"
-    container_name: agent
+    container_name: ${AGENT_FOLDER:-base}
 
   ssh_server:
     profiles:
