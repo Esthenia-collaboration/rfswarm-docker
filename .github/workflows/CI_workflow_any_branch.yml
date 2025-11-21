@@ -6,19 +6,18 @@ on:
       - main
     paths:
       - 'agent/base/**'
-      - 'agent/seleniumlibrary-chrome/**'
       - 'agent/sshlibrary/**'
       - 'agent/seleniumlibrary-firefox/**'
 
 env:
   BASE_IMAGE: "agent/base"
-  OTHER_IMAGES: "agent/seleniumlibrary-chrome agent/sshlibrary agent/seleniumlibrary-firefox"
+  OTHER_IMAGES: "agent/sshlibrary agent/seleniumlibrary-firefox"
 
 jobs:
   check_changes:
     uses: ./.github/workflows/check_changes_template.yml
     with:
-      PROJECT_IMAGES: "agent/base agent/seleniumlibrary-chrome agent/sshlibrary agent/seleniumlibrary-firefox"
+      PROJECT_IMAGES: "agent/base agent/sshlibrary agent/seleniumlibrary-firefox"
   # Build and push base image if changes detected
   build_base_image:
     needs: check_changes
