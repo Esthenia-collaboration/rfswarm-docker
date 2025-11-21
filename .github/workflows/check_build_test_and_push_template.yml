@@ -43,7 +43,7 @@ jobs:
             --name agent \
             --hostname agent \
             --network docker_network \
-            -e AGENTNAME=ssh \
+            -e AGENTNAME=sshlibrary \
             rfswarm-image-for-check
       - name: Run ssh sever
         if: ${{ contains(inputs.IMAGE, 'agent/sshlibrary') }}

@@ -6,7 +6,7 @@ FROM python:3.13.9-slim
 ENV PYTHONPATH="${PYTHONPATH}:/src/"
 
 RUN apt-get -y update \
-    && apt-get install -y xvfb tk-dev \
+    && apt-get install -y xvfb tk \
     && rm -rf /var/lib/apt/lists/*
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir --user tk configparser psutil rfswarm-manager

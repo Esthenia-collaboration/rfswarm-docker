@@ -21,7 +21,7 @@ services:
       RUN_AUTOMATICALLY: # true, yes, 1, default: false
       AGENTS: # default: 1
       RESULTS_DIR: # default: /src/reports
-      SCENARIO_FILE:
+      SCENARIO_FILE: /src/manager/scenarios/${AGENT_FOLDER:-base}/scenario.rfs
       IPADDRESS:
       STARTTIME:
     volumes:
