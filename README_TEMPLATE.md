@@ -83,48 +83,42 @@ docker pull ghcr.io/esthenia-collaboration/rfswarm-agent-base:latest
 To run an rfswarm Agent, use one of the prebuilt Agent Docker images. For example:
 
 ```bash
-docker run -d --name rfswarm-agent \
-  -p 8081:8081 \
-  -v $(pwd)/tests:/src/agent/tests \
+docker run -d --name agent \ 
+  -m http://manager:8138 \
+  -g 2 -p container:docker \
   estheniacollaboration/rfswarm-agent-base:latest
 
   ```
 
+
+  ## Environment Variables
+
+- `AGENTNAME`: Agent name you want to use
+- `PROPERTY1`: can add custom properties as your need to make filter easier
+- `PROPERTY2`:   
+- `MANAGER`: URL to contact the manager  
+
+- In the same section you can add if needed environment variables listed below:
+
+- `LOG_LEVEL`: to set logs level: 0,1,2,3
+- `CONFIG_FILE`: manager.ini configuration file 
+- `AGENTS`: number of agents to use  
+- `AGENTDIR`: Directory the agent should use for files and run tests 
+- `ROBOT`: The robot framework executable id needed to specified
+- `AGENTNAME`:  agent name you want to use (Agent name available in the current release: base, seleniumlibrary-firefox, sshlibrary)
+
  ## Notes
 
-- Replace `8081` with your preferred port if needed.
-- Mount your test suites into the container (`-v $(pwd)/tests:/src/agent/tests`) so the Agent can access them.
 - You can run multiple Agents by giving each container a unique name and port.
 
 
 ### Step 3 — Run the Manager
 
-1. **Clone the repository:**
-
-```bash
-git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
-cd rfswarm-docker/manager
-docker build -t local/rfswarm-manager-base:latest .
-docker images
-
-- You should see local/rfswarm-manager-base in the list of images.
 
 - The Manager container can be started using the settings defined in `compose-manager.yml`.  
 - In this case providing a scenario file while running the manager image is mandatory.
-A minimal `docker run` equivalent is:
+"At the moment there isn't any manager base image available. Therefore, no run command can be use. The easiest way to run manager inside a docker container is to use the compose-manager.yml available "
 
-```bash
-docker run -d --name manager \
-  -p 8138:8138 \
-  -e DISPLAY=$DISPLAY \
-  -v $(pwd)/tests/agent:/src/manager/scenarios \
-  -v $(pwd)/tests/suites:/src/manager/scripts \
-  -v $(pwd)/configuration:/src/manager/configuration \
-  -v $(pwd)/reports:/src/reports \
-  -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
-  estheniacollaboration/rfswarm-manager-base:latest
-
-```
   ## Run the Manager with `compose-manager.yml`
 
 You can start the Manager container using Docker Compose to simplify environment setup.
@@ -154,7 +148,8 @@ docker-compose -f compose-manager.yml up -d
 docker ps
 ```
 
-- The Manager should now be accessible on port 8138 (or the port you defined in the .env file or compose-manager.yml).
+- The Manager should now be accessible on port 8138 (default value).
+- PORT value defined in the compose-manager.yml is set in the .env.example. You must rename this file as .env .If the manager port need to be change, it can be modify in the .env file or in the compose-manager.yml environment values listed below:
 
   ## Environment Variables
 
@@ -210,7 +205,8 @@ docker ps
 docker network create rfswarm
 ```
 
-## 10. Scaling and Parallel Execution
+## 10. TODO: 
+ # Scaling and Parallel Execution
 
 - Explain how to add multiple Agents to simulate more virtual users
 - Example configuration for 10, 50, or 100 Agents 
@@ -220,10 +216,10 @@ docker network create rfswarm
 
 | Image Name                                                   | Status    | Description                                                                                   |
 |--------------------------------------------------------------|-----------|-----------------------------------------------------------------------------------------------|
-| **estheniacollaboration/rfswarm-agent-base**                 | ✅ Available | Debian + Python 3.x + rfswarm Agent + Robot Framework + RequestsLibrary + DataDriver          |
-| **estheniacollaboration/rfswarm-agent-sshlibrary**           | ✅ Available | Base image + SSHLibrary                                                                       |
-| **estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome** | 🕒 In progress | Base image + SeleniumLibrary + Chrome browser                                                 |
-| **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | Base image + SeleniumLibrary + Firefox browser                                                |
+| **estheniacollaboration/rfswarm-agent-base**                 | ✅ Available | Debian + Python 3.x + rfswarm Agent + Robot Framework + RequestsLibrary + DataDriver  +  FakerLibrary        |
+| **estheniacollaboration/rfswarm-agent-sshlibrary**           | ✅ Available | base + SSHLibrary                                                                    |
+| **estheniacollaboration/rfswarm-agent-seleniumlibrary-chrome** | 🕒 In progress | base + SeleniumLibrary + Chrome browser                                                 |
+| **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | base + SeleniumLibrary + Firefox browser                                                |
 
 
 

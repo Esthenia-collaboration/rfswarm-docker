@@ -6,15 +6,14 @@ services:
       dockerfile: Dockerfile
     hostname: manager
     ports:
-      - "8138:8138" # you need to update container port as "8138:${PORT}". If PORT=8139 use 8138:8139
-      # - "8138:${PORT}" # uncomment if you use a .env file as .env.example
+      - "8138:${MANAGER_PORT:-8138}" # PORT value is set in the .env.example. You must rename it as .env .If the manager port need to be change, it can be modify in the .env.example 
     security_opt:
       - no-new-privileges:true
     networks:
       - rfswarm
     environment:
       DISPLAY: $DISPLAY # mandatory to launch in GUI mode
-      PORT: # default: 8138
+      PORT: ${MANAGER_PORT:-8138} # default: 8138
       CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
       LOG_LEVEL: 3 # 1-5, default: 0
       DISPLAY_GUI: # true, yes, 1, default: false

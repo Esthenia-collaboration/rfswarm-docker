@@ -15,8 +15,9 @@ services:
       - manager
     environment:
       AGENTNAME: ${AGENT_FOLDER:-base}
-      PROPERTY1: PROPERTY1
+      PROPERTY1: PROPERTY1 
       PROPERTY2: PROPERTY2
+      MANAGER: http://manager:${MANAGER_PORT:-8138} # URL to contact the manager. the value "manager" in the URL is the namre of manager's docker container. It can only be use if the manager and agent are on the same network. Otherwise, network address must to be use.
     logging:
       driver: "json-file"
       options:
