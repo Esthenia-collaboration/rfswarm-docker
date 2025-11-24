@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     hostname: manager
     ports:
-      - "8138:${MANAGER_PORT:-8138}" # PORT value is set in the .env.example. You must rename it as .env .If the manager port need to be change, it can be modify in the .env.example 
+      - "8138:${MANAGER_PORT:-8138}" # MANAGER_PORT value is set in the .env .If the manager port need to be change, it can be modify in the .env
     security_opt:
       - no-new-privileges:true
     networks:
