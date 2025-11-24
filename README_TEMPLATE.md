@@ -131,7 +131,7 @@ You can start the Manager container using Docker Compose to simplify environment
 git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
   
 ```
-2. **Navigate to the Manager directory:**
+2. **Navigate to the project directory:**
 
 ```bash
 cd rfswarm-docker/
