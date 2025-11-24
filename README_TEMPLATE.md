@@ -104,7 +104,7 @@ docker run -d --name agent \
 - `CONFIG_FILE`: manager.ini configuration file 
 - `AGENTS`: number of agents to use  
 - `AGENTDIR`: Directory the agent should use for files and run tests 
-- `ROBOT`: The robot framework executable id needed to specified
+- `ROBOT`: The robot framework executable if needed to specify
 - `AGENTNAME`:  agent name you want to use (Agent name available in the current release: base, seleniumlibrary-firefox, sshlibrary)
 
  ## Notes
