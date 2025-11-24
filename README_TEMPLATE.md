@@ -134,14 +134,13 @@ git clone https://github.com/Esthenia-collaboration/rfswarm-docker.git
 2. **Navigate to the Manager directory:**
 
 ```bash
-cd rfswarm-docker/manager
+cd rfswarm-docker/
 ```
 
 3. **Start the Manager with Docker Compose:**
 
 ```bash
-docker-compose -f compose-manager.yml up -d
-```
+docker-compose  up -d --build
 
 4. **Verify the container is running:**
 ```bash
