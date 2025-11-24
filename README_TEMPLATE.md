@@ -141,6 +141,7 @@ cd rfswarm-docker/
 
 ```bash
 docker-compose  up -d --build
+```
 
 4. **Verify the container is running:**
 ```bash
