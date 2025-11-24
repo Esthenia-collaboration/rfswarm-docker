@@ -1,0 +1,84 @@
+[Scenario]
+uploadmode = err
+scriptcount = 10
+graphlist =
+
+[1]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can Get Fake Name
+script = /src/manager/scripts/faker.robot
+
+[2]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Two Calls To Faker Should Give Different Results
+script = /src/manager/scripts/faker.robot
+
+[3]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Two Calls To Faker With Same Seed Should Give Same Results
+script = /src/manager/scripts/faker.robot
+
+[4]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can Seed Faker
+script = /src/manager/scripts/faker.robot
+
+[5]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can Seed Faker with str integer argument
+script = /src/manager/scripts/faker.robot
+
+[6]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can call Words with integer argument
+script = /src/manager/scripts/faker.robot
+
+[7]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can call Words with str integer argument
+script = /src/manager/scripts/faker.robot
+
+[8]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can call SHA-1
+script = /src/manager/scripts/faker.robot
+
+[9]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can Lexify
+script = /src/manager/scripts/faker.robot
+
+[10]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can call Password
+script = /src/manager/scripts/faker.robot

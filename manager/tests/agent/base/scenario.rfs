@@ -1,6 +1,6 @@
 [Scenario]
 uploadmode = err
-scriptcount = 1
+scriptcount = 3
 graphlist =
 
 [1]
@@ -10,3 +10,19 @@ rampup = 10
 run = 30
 test = RFSwarm Demo Test
 script = /src/manager/scripts/rfswarm.robot
+
+[2]
+robots = 1
+delay = 0
+rampup = 10
+run = 30
+test = Import With Explicit Locale And Seed And No Providers
+script = /src/manager/scripts/faker_localized.robot
+
+[3]
+robots = 1
+delay = 0
+rampup = 10
+run = 10
+test = Can call Password
+script = /src/manager/scripts/faker.robot

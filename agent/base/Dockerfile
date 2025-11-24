@@ -14,7 +14,8 @@ ENV MANAGER=http://manager:8138 \
 RUN pip install --upgrade pip \
     && pip install rfswarm-agent \
         robotframework-requests \
-        robotframework-datadriver
+        robotframework-datadriver \
+        robotframework-faker
 
 # Create a user 'rfagent'
 RUN useradd -m rfagent
@@ -30,4 +31,3 @@ WORKDIR /usr/rfagent
 
 # Run the agent
 ENTRYPOINT ["base-entrypoint.sh"]
-CMD []
