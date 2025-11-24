@@ -206,7 +206,7 @@ docker network create rfswarm
 ```
 
 ## 10. TODO: 
- # Scaling and Parallel Execution
+**Scaling and Parallel Execution**
 
 - Explain how to add multiple Agents to simulate more virtual users
 - Example configuration for 10, 50, or 100 Agents 
