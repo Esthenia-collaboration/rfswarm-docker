@@ -161,8 +161,8 @@ docker ps
 - `RUN_AUTOMATICALLY`: start scenario automatically  
 - `AGENTS`: number of agents to use  
 - `RESULTS_DIR`: directory for storing results  
-- `SCENARIO_FILE`: optional scenario configuration file  
-- `IPADDRESS`: optional, Manager IP address  
+- `SCENARIO_FILE`: Mandatory scenario configuration file  
+- `IPADDRESS`: Manager IP address  
 - `STARTTIME`: optional, scheduled start time for scenario  
 
 
