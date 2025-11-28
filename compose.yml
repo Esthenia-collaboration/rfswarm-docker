@@ -2,10 +2,8 @@
 services:
 
   agent:
-    build:
-      context: .
-      dockerfile: agent/${AGENT_FOLDER:-base}/Dockerfile
-    hostname: ${AGENT_FOLDER:-base}_agent
+    image: estheniacollaboration/rfswarm-agent-${AGENT_FOLDER:-base}
+    hostname: ${AGENT_FOLDER:-base}-agent
     security_opt:
       - no-new-privileges:true
     user: rfagent
