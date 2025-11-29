@@ -4,7 +4,8 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/estheniacollaboration/rfswarm-agent-base?style=flat)](https://hub.docker.com/r/estheniacollaboration/rfswarm-agent-base)
 [![GitHub Repo Stars](https://img.shields.io/github/stars/Esthenia-collaboration/rfswarm-docker?style=flat)](https://github.com/Esthenia-collaboration/rfswarm-docker/stargazers)
 [![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/Esthenia-collaboration/rfswarm-docker/issues)
-[![License](https://img.shields.io/github/license/Esthenia-collaboration/rfswarm-docker?style=flat)](https://github.com/Esthenia-collaboration/rfswarm-docker/blob/main/LICENSE)
+[![Open Source](https://img.shields.io/badge/license-open--source-brightgreen)](https://github.com/Esthenia-collaboration/rfswarm-docker/blob/main/LICENSE)
+
 
 ---
 
