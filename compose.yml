@@ -1,4 +1,5 @@
-# "docker compose up -d --build" or "docker compose --profile sshlibrary up -d --build" for ssh agent
+# "docker compose up -d" or "docker compose --profile sshlibrary up -d" for ssh agent
+# add --build to build manager and/or ssh_server
 services:
 
   agent:
@@ -41,5 +42,42 @@ services:
         max-file: "10"
     container_name: ssh_server
 
-include:
-  - manager/compose-manager.yml
+  manager:
+    build:
+      context: manager
+      dockerfile: Dockerfile
+    hostname: manager
+    ports:
+      - "${MANAGER_PORT:-8138}:${MANAGER_PORT:-8138}" # MANAGER_PORT value is set in the .env .If the manager port need to be change, it can be modify in the .env
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - rfswarm
+    environment:
+      DISPLAY: $DISPLAY # mandatory to launch in GUI mode
+      PORT: ${MANAGER_PORT:-8138} # default: 8138
+      CONFIG_FILE: /src/manager/configuration/manager.yml # ini, yml or json
+      LOG_LEVEL: 3 # 1-5, default: 0
+      DISPLAY_GUI: # true, yes, 1, default: false
+      RUN_AUTOMATICALLY: # true, yes, 1, default: false
+      AGENTS: # default: 1
+      RESULTS_DIR: # default: /src/reports
+      SCENARIO_FILE: /src/manager/scenarios/${AGENT_FOLDER:-base}/scenario.rfs
+      IPADDRESS:
+      STARTTIME:
+    volumes:
+      - ./manager/tests/agent:/src/manager/scenarios # default scenariodir
+      - ./manager/tests/suites:/src/manager/scripts # default scriptdir
+      - ./manager/configuration:/src/manager/configuration
+      - ./manager/reports:/src/reports # default resultsdir
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw # mandatory to launch in GUI mode
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
+    container_name: manager     
+
+networks:
+  rfswarm:
+    name: rfswarm
