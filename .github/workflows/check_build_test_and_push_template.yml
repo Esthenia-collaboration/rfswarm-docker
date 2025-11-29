@@ -151,9 +151,20 @@ jobs:
           retention-days: 2
       - name: Clean docker space
         run: |
-          docker stop ssh_server || true
-          docker stop agent;
-          docker network rm docker_network
+          # Stop & remove ssh_server if it exists
+          if [ "$(docker ps -a -q -f name=ssh_server)" ]; then
+            docker rm -f ssh_server
+          fi
+
+          # Stop & remove agent if it exists
+          if [ "$(docker ps -a -q -f name=agent)" ]; then
+            docker rm -f agent
+          fi
+
+          # Remove docker network if exists
+          if docker network inspect docker_network >/dev/null 2>&1; then
+            docker network rm docker_network
+          fi    
   push_to_registry:
     name: Push rfswarm ${{ inputs.IMAGE }} image to registry
     needs:
