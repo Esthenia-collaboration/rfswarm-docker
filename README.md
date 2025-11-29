@@ -84,9 +84,11 @@ cp .env.example .env
 
 Start the Manager and the default (base) Agent or another agent if you change `AGENT_FOLDER` variable in `.env`
 ```bash
+# Before running compose file, don't forget to update the env variable: {AGENT_FOLDER} in the .env file with the agent image you want to run. Ex: AGENT_FOLDER= seleniumlibrary-firefox
+# then, to run base image or seleniumlibrary-firefox agent:
 docker compose up -d --build
 # or
-# for ssh agent
+# for ssh agent:
 docker compose --profile sshlibrary up -d --build
 ```
 
@@ -182,6 +184,64 @@ docker compose up -d --build manager
 | **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | base + SeleniumLibrary + Firefox browser                                                              |
 | **estheniacollaboration/rfswarm-manager**                       | 📅 Upcoming | Debian + Python 3.x + rfswarm Manager + Robot Framework                                               |
 
+## 📦 Agent Images packages versions
+
+**rfswarm-agent-base**
+
+  | Package                   | Version    |
+  |---------------------------|------------|
+  | certifi                   | 2025.11.12 |
+  | charset-normalizer        | 3.4.4      |
+  | configparser              | 7.2.0      |
+  | docutils                  | 0.22.3     |
+  | Faker                     | 38.2.0     |
+  | idna                      | 3.11       |
+  | psutil                    | 7.1.3      |
+  | Pygments                  | 2.19.2     |
+  | PyYAML                    | 6.0.3      |
+  | requests                  | 2.32.5     |
+  | rfswarm-agent             | 1.5.3      |
+  | robotframework            | 7.3.2      |
+  | robotframework-datadriver | 1.11.2     |
+  | robotframework-faker      | 6.0.0      |
+  | robotframework-requests   | 0.9.7      |
+  | tzdata                    | 2025.2     |
+  | urllib3                   | 2.5.0      |
+  | wrapt                     | 2.0.1      |
+
+**rfswarm-agent-sshlibrary**
+
+| Package                   | Version    |
+  |---------------------------|------------|
+  | bcrypt                    | 5.0.0      |
+  | cffi                      | 2.0.0      |
+  | configparser              | 7.2.0      |
+  | cryptography              | 46.0.3     |
+  | invoke                    | 2.2.1      |
+  | paramiko                  | 4.0.0      |
+  | pycparser                 | 2.23       |
+  | PyNaCl                    | 1.6.1      |
+  | robotframework-sshlibrary | 3.8.0      |
+  | scp                       | 0.15.0     |
+
+**rfswarm-agent-seleniumlibrary-firefox**
+  | Package                        | Version     |
+  |--------------------------------|-------------|
+  | attrs                          | 25.4.0      |
+  | click                          | 8.3.1       |
+  | h11                            | 0.16.0      |
+  | outcome                        | 1.3.0.post0 |
+  | PySocks                        | 1.7.1       |
+  | robotframework-pythonlibcore   | 4.4.1       |
+  | robotframework-seleniumlibrary | 6.8.0       |
+  | selenium                       | 4.38.0      |
+  | sniffio                        | 1.3.1       |
+  | sortedcontainers               | 2.4.0       |
+  | trio                           | 0.32.0      |
+  | trio-websocket                 | 0.12.2      |
+  | typing_extensions              | 4.15.0      |
+  | websocket-client               | 1.9.0       |
+  | wsproto                        | 1.3.2       |
 
 ## 🔗 Useful Links
 
