@@ -1,6 +1,4 @@
-name: "💬 Feedback"
-about: "Share your experience using this project"
-title: "Feedback: "
+title: "💬 Feedback"
 labels: ["feedback"]
 body:
   - type: markdown
@@ -12,8 +10,7 @@ body:
     id: usage
     attributes:
       label: "How did you use the project?"
-      placeholder: "e.g. local testing, CI pipeline"
-      required: true
+      placeholder: "e.g., local testing, CI pipeline"
   - type: dropdown
     id: ease
     attributes:
@@ -27,7 +24,7 @@ body:
     id: issues
     attributes:
       label: "Any issues you encountered?"
-      placeholder: "Describe the problem..."
+      placeholder: "Describe any problems..."
   - type: textarea
     id: improvements
     attributes:
