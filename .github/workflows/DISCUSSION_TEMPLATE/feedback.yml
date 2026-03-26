@@ -1,0 +1,35 @@
+name: "💬 Feedback"
+about: "Share your experience using this project"
+title: "Feedback: "
+labels: ["feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for using this project! 🙌  
+        Your feedback helps us improve it.
+  - type: input
+    id: usage
+    attributes:
+      label: "How did you use the project?"
+      placeholder: "e.g. local testing, CI pipeline"
+      required: true
+  - type: dropdown
+    id: ease
+    attributes:
+      label: "Was it easy to use?"
+      options:
+        - Very easy
+        - Easy
+        - Difficult
+        - Very difficult
+  - type: textarea
+    id: issues
+    attributes:
+      label: "Any issues you encountered?"
+      placeholder: "Describe the problem..."
+  - type: textarea
+    id: improvements
+    attributes:
+      label: "Suggestions for improvement"
+      placeholder: "Your ideas..."

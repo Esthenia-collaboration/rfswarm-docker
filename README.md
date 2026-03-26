@@ -8,6 +8,15 @@
 
 
 ---
+## 💬 Feedback
+
+Using this project? Share your experience:
+
+👉  [Thank you for your precious time](https://github.com/Esthenia-collaboration/rfswarm-docker/discussions/new?category=feedback)
+
+Takes less than 30 seconds 🙌
+
+---
 
 ## 1. 🚀 Why?  
 
