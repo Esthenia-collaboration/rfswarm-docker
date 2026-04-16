@@ -16,9 +16,9 @@ jobs:
       - name: Fetch pulls & append to CSV
         run: |
           DATE=$(date -u +"%Y-%m-%d")
-          BASE=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-base/ | jq '.pull_count')
-          SSH=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-sshlibrary/ | jq '.pull_count')
-          FIREFOX=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox/ | jq '.pull_count')
+          BASE=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-base/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
+          SSH=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-sshlibrary/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
+          FIREFOX=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
           echo "$DATE,$BASE,$SSH,$FIREFOX" >> dockerhub-stats.csv
 
       - name: Commit & push
