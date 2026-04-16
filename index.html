@@ -16,9 +16,9 @@
           type: 'line',
           data: {
             datasets: [
-              { label: 'rfswarm-agent-base',                        borderColor: '#4e79a7', data: rows.map(r => ({ x: r[0], y: +r[1] })) },
-              { label: 'rfswarm-agent-sshlibrary',                  borderColor: '#f28e2b', data: rows.map(r => ({ x: r[0], y: +r[2] })) },
-              { label: 'rfswarm-agent-seleniumlibrary-firefox',      borderColor: '#e15759', data: rows.map(r => ({ x: r[0], y: +r[3] })) },
+              { label: 'rfswarm-agent-base', borderColor: '#4e79a7', borderWidth: 2, pointRadius: 4, showLine: true, fill: false, tension: 0.3, data: rows.map(r => ({ x: r[0], y: +r[1] })) },
+              { label: 'rfswarm-agent-sshlibrary', borderColor: '#f28e2b', borderWidth: 2, pointRadius: 4, showLine: true, fill: false, tension: 0.3, data: rows.map(r => ({ x: r[0], y: +r[2] })) },
+              { label: 'rfswarm-agent-seleniumlibrary-firefox', borderColor: '#e15759', borderWidth: 2, pointRadius: 4, showLine: true, fill: false, tension: 0.3, data: rows.map(r => ({ x: r[0], y: +r[3] })) },
             ]
           },
           options: {
