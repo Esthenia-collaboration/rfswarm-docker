@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RFSwarm DockerHub pulls</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+</head>
+<body>
+  <canvas id="chart"></canvas>
+  <script>
+    fetch('dockerhub-stats.csv')
+      .then(r => r.text())
+      .then(csv => {
+        const rows = csv.trim().split('\n').slice(1).map(r => r.split(','));
+        new Chart(document.getElementById('chart'), {
+          type: 'line',
+          data: {
+            datasets: [
+              { label: 'rfswarm-agent-base',                        borderColor: '#4e79a7', data: rows.map(r => ({ x: r[0], y: +r[1] })) },
+              { label: 'rfswarm-agent-sshlibrary',                  borderColor: '#f28e2b', data: rows.map(r => ({ x: r[0], y: +r[2] })) },
+              { label: 'rfswarm-agent-seleniumlibrary-firefox',      borderColor: '#e15759', data: rows.map(r => ({ x: r[0], y: +r[3] })) },
+            ]
+          },
+          options: {
+            scales: { x: { type: 'time', time: { unit: 'day' } } }
+          }
+        });
+      });
+  </script>
+</body>
+</html>
