@@ -19,6 +19,8 @@ jobs:
           BASE=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-base/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
           SSH=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-sshlibrary/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
           FIREFOX=$(curl -s https://hub.docker.com/v2/repositories/estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox/ | python3 -c "import sys,json; print(json.load(sys.stdin)['pull_count'])")
+          echo "DEBUG: $DATE $BASE $SSH $FIREFOX"
+          echo "" >> dockerhub-stats.csv
           echo "$DATE,$BASE,$SSH,$FIREFOX" >> dockerhub-stats.csv
 
       - name: Commit & push
