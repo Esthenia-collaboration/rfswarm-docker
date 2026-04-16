@@ -194,6 +194,8 @@ docker compose up -d --build manager
 | **estheniacollaboration/rfswarm-agent-seleniumlibrary-firefox** | ✅ Available  | base + SeleniumLibrary + Firefox browser                                                              |
 | **estheniacollaboration/rfswarm-manager**                       | 📅 Upcoming | Debian + Python 3.x + rfswarm Manager + Robot Framework                                               |
 
+[Statistics of the images pulls on DockerHub](https://esthenia-collaboration.github.io/rfswarm-docker/index.html)
+
 ## 📦 Agent Images packages versions
 
 **rfswarm-agent-base**
